@@ -1,6 +1,6 @@
 
-bin/
-obj/
+TC1K_LaserMonitor/bin
+TC1K_LaserMonitor/obj
 .vs/
 *.user
 *.lnk

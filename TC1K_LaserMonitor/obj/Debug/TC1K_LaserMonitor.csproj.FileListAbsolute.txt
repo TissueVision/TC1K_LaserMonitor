@@ -1,0 +1,8 @@
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\bin\Debug\TC1K_LaserMonitor.exe
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\bin\Debug\TC1K_LaserMonitor.pdb
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\obj\Debug\TC1K_LaserMonitor.Form1.resources
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\obj\Debug\TC1K_LaserMonitor.Properties.Resources.resources
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\obj\Debug\TC1K_LaserMonitor.csproj.GenerateResource.Cache
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\obj\Debug\TC1K_LaserMonitor.exe
+C:\Users\pmirsky\source\repos\TC1K_LaserMonitor\TC1K_LaserMonitor\obj\Debug\TC1K_LaserMonitor.pdb

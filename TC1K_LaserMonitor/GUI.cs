@@ -13,6 +13,8 @@ namespace TC1K_LaserMonitor
     {
         public Reporter Rep = new Reporter();
         public optionSettings optionSettings = new optionSettings();
+        string optionSettingsPath = @"C:\TissueVision\LaserMonitor\optionSettings.csv";
+        public SettingsFileHandler settingsFileHandler = new SettingsFileHandler();
 
         public System.Timers.Timer laserGUIupdateTimer = new System.Timers.Timer(); // triggers updating the laser
         public double laserGUIUpdateInterval_ms = 1000;
@@ -37,13 +39,29 @@ namespace TC1K_LaserMonitor
             InitializeComponent();
         }
 
+
+
+
         private void GUI_Load(object sender, EventArgs e)
         {
-            // load settings file, etc.
+
+            Rep.errorAndon.control = errorAndon;
+            Rep.messageCtrl = userMessages;
+            Rep.initialize();
 
 
             laser.gui = this;
+            laser.Rep = Rep;
             laser.optionSettings = optionSettings;
+
+            // load settings file, etc.
+            settingsFileHandler.Rep = Rep;
+            bool thisFileLoadedOK;
+            optionSettings = (optionSettings)settingsFileHandler.loadSettingsFile(out thisFileLoadedOK, optionSettingsPath, optionSettings);
+            //optionSettingsBindingSource.DataSource = optionSettings;
+            //optionSettingsBindingSource.ResetBindings(false);
+
+
         }
 
 
@@ -280,7 +298,7 @@ namespace TC1K_LaserMonitor
             laserGUIupdateTimer.Enabled = false;
             System.Threading.Thread.Sleep((int)laserGUIUpdateInterval_ms);
             laser.enableWatchdog = optionSettings.enableLaserWatchdog;
-            laser.fakeOut = optionSettings.fakeOutLaser || optionSettings.fakeOutAllHardware;
+            laser.fakeOut = optionSettings.fakeOutLaser;
             laser.Rep = Rep;
             if (laser.initialize() == TaskEnd.OK)
             {
@@ -562,6 +580,10 @@ namespace TC1K_LaserMonitor
 
 
 
+        private void button_clearError_Click(object sender, EventArgs e)
+        {
+            Rep.ClearCancelAll();
+        }
 
 
 

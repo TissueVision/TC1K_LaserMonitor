@@ -25,7 +25,7 @@ namespace TC1K_LaserMonitor
     public class Reporter
     {
 
-        public System.Windows.Forms.ListBox[] messageCtrl = new System.Windows.Forms.ListBox[0];
+        public System.Windows.Forms.ListBox messageCtrl = new System.Windows.Forms.ListBox();
         public Andon errorAndon = new Andon();
         public int nMessagesMax = 200;
         public int nMessagesToTrim = 100;
@@ -91,26 +91,22 @@ namespace TC1K_LaserMonitor
 
             if (levelsToDisplay.Contains(level))
             {
-                for (int ind = 0; ind < messageCtrl.Length; ind++)
+                if (messageCtrl.Items.Count > nMessagesMax)
                 {
-                    System.Windows.Forms.ListBox thisCtrl = messageCtrl[ind];
-                    if (thisCtrl.Items.Count > nMessagesMax)
+                    for (int ii = 0; ii < nMessagesToTrim; ii++)
                     {
-                        for (int ii = 0; ii < nMessagesToTrim; ii++)
-                        {
-                            thisCtrl.Items.RemoveAt(0);
-                        }
+                        messageCtrl.Items.RemoveAt(0);
                     }
-                    try 
-                    {
-                        thisCtrl.Items.Add(message);
-                        thisCtrl.SetSelected(thisCtrl.Items.Count - 1, true);
-                        thisCtrl.SetSelected(thisCtrl.Items.Count - 1, false);
-                    }
-                    catch(Exception ex)
-                    { 
-                        // put a breakpoint here to catch a bug, which I think occurs when message is null
-                    }
+                }
+                try
+                {
+                    messageCtrl.Items.Add(message);
+                    messageCtrl.SetSelected(messageCtrl.Items.Count - 1, true);
+                    messageCtrl.SetSelected(messageCtrl.Items.Count - 1, false);
+                }
+                catch (Exception ex)
+                {
+                    // put a breakpoint here to catch a bug, which I think occurs when message is null
                 }
             }
 
@@ -125,11 +121,7 @@ namespace TC1K_LaserMonitor
 
         public void ClearConsole()
         {
-            for (int ind = 0; ind < messageCtrl.Length; ind++)
-            {
-                System.Windows.Forms.ListBox thisCtrl = messageCtrl[ind];
-                thisCtrl.Items.Clear();
-            }
+            messageCtrl.Items.Clear();
         }
 
 

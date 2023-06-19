@@ -101,6 +101,7 @@
             this.fixedWLshutterAndon = new System.Windows.Forms.Button();
             this.tunableWLshutterAndon = new System.Windows.Forms.Button();
             this.pmtOnOffIndicator = new System.Windows.Forms.Button();
+            this.userMessages = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // setGreenPower
@@ -112,6 +113,7 @@
             this.setGreenPower.TabIndex = 148;
             this.setGreenPower.Text = "Set green power (W)";
             this.setGreenPower.UseVisualStyleBackColor = true;
+            this.setGreenPower.Click += new System.EventHandler(this.button_setGreenPower);
             // 
             // greenPowerNow
             // 
@@ -190,6 +192,7 @@
             this.button_populateObjectiveList.TabIndex = 142;
             this.button_populateObjectiveList.Text = "Populate list";
             this.button_populateObjectiveList.UseVisualStyleBackColor = true;
+            this.button_populateObjectiveList.Click += new System.EventHandler(this.button_populateObjectiveList_Click);
             // 
             // label_dispersionCorrection
             // 
@@ -212,6 +215,7 @@
             this.button_chooseObjective.TabIndex = 140;
             this.button_chooseObjective.Text = "Choose objective";
             this.button_chooseObjective.UseVisualStyleBackColor = true;
+            this.button_chooseObjective.Click += new System.EventHandler(this.button_chooseObjective_Click);
             // 
             // button6
             // 
@@ -223,6 +227,7 @@
             this.button6.Text = "  Disconnect, close shutter, pump OFF";
             this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button_disconnectPumpOff_Click);
             // 
             // pumpLaser2Temperature
             // 
@@ -329,6 +334,7 @@
             this.button_alignOFF_FixedWL.TabIndex = 130;
             this.button_alignOFF_FixedWL.Text = "Normal mode";
             this.button_alignOFF_FixedWL.UseVisualStyleBackColor = true;
+            this.button_alignOFF_FixedWL.Click += new System.EventHandler(this.button_setAlignMode_Click);
             // 
             // button_align_FixedWL
             // 
@@ -339,6 +345,7 @@
             this.button_align_FixedWL.TabIndex = 129;
             this.button_align_FixedWL.Text = "Align mode";
             this.button_align_FixedWL.UseVisualStyleBackColor = true;
+            this.button_align_FixedWL.Click += new System.EventHandler(this.button_setAlignMode_Click);
             // 
             // button_alignOFF_TunableWL
             // 
@@ -349,6 +356,7 @@
             this.button_alignOFF_TunableWL.TabIndex = 128;
             this.button_alignOFF_TunableWL.Text = "Normal mode";
             this.button_alignOFF_TunableWL.UseVisualStyleBackColor = true;
+            this.button_alignOFF_TunableWL.Click += new System.EventHandler(this.button_setAlignMode_Click);
             // 
             // button_align_TunableWL
             // 
@@ -359,6 +367,7 @@
             this.button_align_TunableWL.TabIndex = 127;
             this.button_align_TunableWL.Text = "Align mode";
             this.button_align_TunableWL.UseVisualStyleBackColor = true;
+            this.button_align_TunableWL.Click += new System.EventHandler(this.button_setAlignMode_Click);
             // 
             // label162
             // 
@@ -490,6 +499,7 @@
             this.button_disconnectPumpOn.Text = "  Disconnect, close shutter, pump ON";
             this.button_disconnectPumpOn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button_disconnectPumpOn.UseVisualStyleBackColor = true;
+            this.button_disconnectPumpOn.Click += new System.EventHandler(this.button_disconnectPumpOn_Click);
             // 
             // physicalKeyStatus
             // 
@@ -594,6 +604,7 @@
             this.button_shutDownLaser.Text = "  Disconnect, prepare for hard powerdown";
             this.button_shutDownLaser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button_shutDownLaser.UseVisualStyleBackColor = true;
+            this.button_shutDownLaser.Click += new System.EventHandler(this.shutDownLaser);
             // 
             // button_closeShutter_TunableWL
             // 
@@ -604,6 +615,7 @@
             this.button_closeShutter_TunableWL.TabIndex = 106;
             this.button_closeShutter_TunableWL.Text = "CLOSE shutter";
             this.button_closeShutter_TunableWL.UseVisualStyleBackColor = true;
+            this.button_closeShutter_TunableWL.Click += new System.EventHandler(this.button_closeShutter_Click);
             // 
             // shutterStatus_TunableWL
             // 
@@ -626,6 +638,7 @@
             this.button_openShutter_TunableWL.TabIndex = 104;
             this.button_openShutter_TunableWL.Text = "OPEN shutter";
             this.button_openShutter_TunableWL.UseVisualStyleBackColor = true;
+            this.button_openShutter_TunableWL.Click += new System.EventHandler(this.button_openShutter_Click);
             // 
             // label148
             // 
@@ -766,6 +779,7 @@
             this.button_closeShutter_FixedWL.TabIndex = 90;
             this.button_closeShutter_FixedWL.Text = "CLOSE shutter";
             this.button_closeShutter_FixedWL.UseVisualStyleBackColor = true;
+            this.button_closeShutter_FixedWL.Click += new System.EventHandler(this.button_closeShutter_Click);
             // 
             // shutterStatus_FixedWL
             // 
@@ -788,6 +802,7 @@
             this.button_openShutter_FixedWL.TabIndex = 88;
             this.button_openShutter_FixedWL.Text = "OPEN shutter";
             this.button_openShutter_FixedWL.UseVisualStyleBackColor = true;
+            this.button_openShutter_FixedWL.Click += new System.EventHandler(this.button_openShutter_Click);
             // 
             // button_pumpLaserOff
             // 
@@ -798,6 +813,7 @@
             this.button_pumpLaserOff.TabIndex = 87;
             this.button_pumpLaserOff.Text = "Pump laser OFF";
             this.button_pumpLaserOff.UseVisualStyleBackColor = true;
+            this.button_pumpLaserOff.Click += new System.EventHandler(this.button_pumpOff_Click);
             // 
             // button_pumpLaserOn
             // 
@@ -808,6 +824,7 @@
             this.button_pumpLaserOn.TabIndex = 86;
             this.button_pumpLaserOn.Text = "Pump laser ON";
             this.button_pumpLaserOn.UseVisualStyleBackColor = true;
+            this.button_pumpLaserOn.Click += new System.EventHandler(this.button_pumpOn_Click);
             // 
             // button_setWavelength
             // 
@@ -818,6 +835,7 @@
             this.button_setWavelength.TabIndex = 85;
             this.button_setWavelength.Text = "Set";
             this.button_setWavelength.UseVisualStyleBackColor = true;
+            this.button_setWavelength.Click += new System.EventHandler(this.button_setWavelength_Click);
             // 
             // warmupStatus
             // 
@@ -877,6 +895,7 @@
             this.button_clearError.TabIndex = 225;
             this.button_clearError.Text = "Clear error";
             this.button_clearError.UseVisualStyleBackColor = true;
+            this.button_clearError.Click += new System.EventHandler(this.button_clearError_Click);
             // 
             // laserStatusAndon
             // 
@@ -935,11 +954,24 @@
             this.pmtOnOffIndicator.Text = ".....";
             this.pmtOnOffIndicator.UseVisualStyleBackColor = false;
             // 
+            // userMessages
+            // 
+            this.userMessages.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.userMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userMessages.FormattingEnabled = true;
+            this.userMessages.ItemHeight = 16;
+            this.userMessages.Location = new System.Drawing.Point(747, 689);
+            this.userMessages.Name = "userMessages";
+            this.userMessages.ScrollAlwaysVisible = true;
+            this.userMessages.Size = new System.Drawing.Size(469, 84);
+            this.userMessages.TabIndex = 229;
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1270, 800);
+            this.Controls.Add(this.userMessages);
             this.Controls.Add(this.errorAndon);
             this.Controls.Add(this.button_clearError);
             this.Controls.Add(this.laserStatusAndon);
@@ -1098,6 +1130,7 @@
         public System.Windows.Forms.Button fixedWLshutterAndon;
         public System.Windows.Forms.Button tunableWLshutterAndon;
         public System.Windows.Forms.Button pmtOnOffIndicator;
+        private System.Windows.Forms.ListBox userMessages;
 
     }
 }

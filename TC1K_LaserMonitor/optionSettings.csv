@@ -1,153 +1,16 @@
-//,,
-// SHOW TABS,,
-showAuxButtons,TRUE,
-showManyScansTab,TRUE,
-showEng1Tab,TRUE,
-showSurfaceFindingTab,TRUE,
-showNovoUItabs,FALSE,
-showLegacyTabs,TRUE,
-showSASPtab,FALSE,
-//,,
-// MISC,,
-yShakeoffDist_mm,8,
-pifocUpdateInterval_ms,500,"in ms, how often screen updates.  this only applies if using the software PIFOC"
-enableTextLog,TRUE,
-findSurfaceForEachWavelength,TRUE,this only matters if useMultipleWavelengthScan
-ChannelForSurfaceFinding,2,number 1-8
-pifocZDefault_um,200,this is the sum of both digital and analog components
-largeSampleForToronto,FALSE,
-useDropDispenser,FALSE,
-nDropsDispense,0,
-nDropsAspirate,0,
-drySlide,FALSE,
-slideDryingTime_s,0,
-connectOKcolor,Green,
-connectErrorColor,Red,
-laserLogFilename,C:\TissueVision\SystemLogs\laserLog.csv,
-flatFieldFolder,C:\TissueVision\SystemLogs\flatFields\,
-auxCamExposure,-4,
-logTileTiming,FALSE
-reportVivaceComms,FALSE
-attemptMultipleTransfers,FALSE
-reportGripperDetails,FALSE
-reportStageDetails,FALSE
-//,,
-// LASER,,
-enableLaserWatchdog,TRUE,
-useIntegratedLaserGUI,TRUE,enables laser control tab
-monitorLaser,TRUE,pauses if the orchestrator-integrated laser GUI reports error conditions
-laserGUIUpdateInterval_ms,800,
-laserMinOKPower_W,1,
-maxQueryErrors,10000,
-maxConsecutiveQueryErrors,5,
-maxShutterErrors,1000000,
-maxConsecutiveShutterErrors,1000000,
-maxModelockErrors,3,
-maxConsecutiveModelockErrors,2,
-//,,
-// SLICE CAPTURE,,
-sliceCaptureConcurrently,TRUE,
-useDiagSlideCam,FALSE,Whether the system (luster OR fluor detector) has a diagnostic slide cam.  Requires SaveDiagnosticImages to work.
-useDiagBeltCam,FALSE,Whether the system (luster ONLY; for fluor it doesn't matter) has a diagnostic belt cam.  Requires SaveDiagnosticImages to work.
-beltCamExposure,-4,Use -4 for cy7 (red) and -9 for cy3 (green)
-slideCamExposure,-7,
-xZeroPoint_px,640,"the pixel in the belt cam image that it considers the ""center"""
-maxDistFromCenter_mm,3,It will only find the slice if it is close enough to the center of the field of view
-nPixelsToErodeDilate,4,
-blowoffTime_ms,400,blow slice off belt
-blowoffLF,TRUE,
-maxSliceSearchTime_s,50,"If it exceeds this, then it times out"
-maxMarkerAngle,90,set to 90 to effectively turn this feauture off
-minSepRatio,0.7,"Smallest allowable separation between markers, as a fraction of nominal"
-maxSepRatio,1.6,
-minMarkerAreaRatio,0.3,"Smallest allowable marker area, as a fraction of nominal"
-maxMarkerAreaRatio,9,
-pauseOnSCfailure,TRUE,pauses for section-capture failures
-pauseOnNConsecutiveFailures,2,pauses if there are N *consecutive* failures
-pauseOnCumuFailureFraction,0.1,"pauses if there is a *cumulative* error fraction greater than N, *and*... (see next)"
-pauseOnMinCumuFailures,2,"... cumulative error fraction, *and* at least this many"
-nTidyUpAbove,1,
-nTidyUpBelow,1,
-tidyUpReturned,FALSE,"true/false, the slide that was just replaced"
-tidyUpOffset,-16,end of tidy-up relative to nominal slide-in-slot position (negative)
-everyOtherSlide,FALSE,
-robotSlowdownFactor,1,
-suppressHCclosure,FALSE,this keeps the HC door open while fetching section
-blowoffDelayLF_ms,1500,
-detectZoneXMin_px,200,
-detectZoneXMax_px,1080,
-detectZoneYMin_px,50,
-detectZoneYMax_px,670,
-overscoop_mm,0.5,
-underscoop_mm,-3,
-slideReturnGapY_mm,0.2,
-slideReturnGapZ_mm,0.2,
-transferUpSpeed_mmps,0.8,
-transferDownSpeed_mmps,0.2,
-displaceBeltDist_mm,1,
-waypointToBeltDist_mm,5,
-aspirationToBeltDist_mm,2,
-markerDetectionChannel,Red,
-removeSliceSlowlyFromBath,FALSE
-removeSlowSpeed_mmps,10
-removeSlowAccel_mmpss,2
-removeSlowDist_mm,50
-//,,
-// TRINAMIC ACTUATOR SPEEDS / ACCELS,,
-hcSpeed_dps,108,
-hcAccel_dpss,27,
-hcHomingSpeed_dps,20,
-zStageSpeed_mmps,1,
-zStageAccel_mmpss,1.4,
-immLensSpeed_dps,10,
-immLensAccel_dpss,10,
-beltAccel2SpeedRatio,2,
-//,,
-// PI STAGE PARAMETERS,,
-x_P_val,120,
-x_I_val,0,
-x_D_val,250,
-x_I_limit_val,2000,
-x_SettlingWindow_um,10,half-width
-x_SettlingTime_s,0.01,if this is zero then no waiting for settling
-x_speed_mmps,20,
-x_accel_mmpss,200,
-y_P_val,60,
-y_I_val,0,
-y_D_val,80,
-y_I_limit_val,2000,
-y_SettlingWindow_um,20,half-width
-y_SettlingTime_s,0.01,if this is zero then no waiting for settling
-y_speed_mmps,20,
-y_accel_mmpss,120,
-//,,
-// FAKE-OUTS,,
-fakeOutXstage,FALSE,
-fakeOutYstage,FALSE,
-fakeOutZstage,FALSE,
-fakeOutVivace,FALSE,
-fakeOutTrinamic,FALSE,
-fakeOutLCVR,FALSE,
-fakeOutVibratome,FALSE,
-fakeOutPiezo,FALSE,
-fakeOutPMTs,FALSE,
-fakeOutRobot,FALSE,
-fakeOutIO,FALSE,
-fakeOutBeltCam,FALSE,
-fakeOutSlideCam,FALSE,
-fakeOutLaser,FALSE,
-fakeOut2aryDriver,FALSE,
-fakeOutNikonZ7,FALSE,
-fakeOutGripper,FALSE,
-fakeOutImmLens,FALSE,
-fakeOutAuxCam,FALSE,
-fakeOutBelt,FALSE,
-fakeOutHC1,FALSE,
-fakeOutHC2,FALSE,
-fakeOutMonitorCam,FALSE,
-fakeOutSASPcam,FALSE,
-fakeOutAllHardware,TRUE,
-uniqueNoiseForVivaceFakeout,TRUE,
-disregardMissingSettingsFiles,FALSE,
-//,,
-// NEW FIELDS HERE,,
+laserPort,COM3
+laserType,MaiTai
+fakeOutLaser,false
+wavelength,820
+laserPowerMinFrac,0.9
+laserPowerMaxFrac,1.1
+killOrchestratorOnLaserFluctuation,true
+enableLaserWatchdog,true
+laserGUIUpdateInterval_ms,500
+laserMinOKPower_W,1
+maxQueryErrors,10
+maxConsecutiveQueryErrors,3
+maxShutterErrors,10
+maxConsecutiveShutterErrors,3
+maxModelockErrors,10
+maxConsecutiveModelockErrors,3

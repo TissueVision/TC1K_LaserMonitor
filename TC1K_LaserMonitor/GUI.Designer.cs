@@ -32,7 +32,6 @@
             this.setGreenPower = new System.Windows.Forms.Button();
             this.greenPowerNow = new System.Windows.Forms.Label();
             this.greenPowerToSet = new System.Windows.Forms.TextBox();
-            this.laserStatusMessage = new System.Windows.Forms.TextBox();
             this.wavelengthToSet = new System.Windows.Forms.TextBox();
             this.check_controlGreenPower = new System.Windows.Forms.CheckBox();
             this.label_greenPowerNow = new System.Windows.Forms.Label();
@@ -76,7 +75,6 @@
             this.button_closeShutter_TunableWL = new System.Windows.Forms.Button();
             this.shutterStatus_TunableWL = new System.Windows.Forms.Label();
             this.button_openShutter_TunableWL = new System.Windows.Forms.Button();
-            this.label148 = new System.Windows.Forms.Label();
             this.errorCode = new System.Windows.Forms.Label();
             this.label147 = new System.Windows.Forms.Label();
             this.power = new System.Windows.Forms.Label();
@@ -111,7 +109,7 @@
             // 
             // setGreenPower
             // 
-            this.setGreenPower.Location = new System.Drawing.Point(704, 584);
+            this.setGreenPower.Location = new System.Drawing.Point(705, 497);
             this.setGreenPower.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.setGreenPower.Name = "setGreenPower";
             this.setGreenPower.Size = new System.Drawing.Size(188, 29);
@@ -125,7 +123,7 @@
             this.greenPowerNow.AutoSize = true;
             this.greenPowerNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.greenPowerNow.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.greenPowerNow.Location = new System.Drawing.Point(1034, 622);
+            this.greenPowerNow.Location = new System.Drawing.Point(1035, 535);
             this.greenPowerNow.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.greenPowerNow.Name = "greenPowerNow";
             this.greenPowerNow.Size = new System.Drawing.Size(15, 20);
@@ -134,19 +132,11 @@
             // 
             // greenPowerToSet
             // 
-            this.greenPowerToSet.Location = new System.Drawing.Point(1008, 585);
+            this.greenPowerToSet.Location = new System.Drawing.Point(1009, 498);
             this.greenPowerToSet.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.greenPowerToSet.Name = "greenPowerToSet";
             this.greenPowerToSet.Size = new System.Drawing.Size(72, 24);
             this.greenPowerToSet.TabIndex = 146;
-            // 
-            // laserStatusMessage
-            // 
-            this.laserStatusMessage.Location = new System.Drawing.Point(704, 45);
-            this.laserStatusMessage.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            this.laserStatusMessage.Name = "laserStatusMessage";
-            this.laserStatusMessage.Size = new System.Drawing.Size(437, 24);
-            this.laserStatusMessage.TabIndex = 103;
             // 
             // wavelengthToSet
             // 
@@ -160,7 +150,7 @@
             // check_controlGreenPower
             // 
             this.check_controlGreenPower.AutoSize = true;
-            this.check_controlGreenPower.Location = new System.Drawing.Point(704, 546);
+            this.check_controlGreenPower.Location = new System.Drawing.Point(705, 459);
             this.check_controlGreenPower.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.check_controlGreenPower.Name = "check_controlGreenPower";
             this.check_controlGreenPower.Size = new System.Drawing.Size(162, 22);
@@ -173,7 +163,7 @@
             this.label_greenPowerNow.AutoSize = true;
             this.label_greenPowerNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_greenPowerNow.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label_greenPowerNow.Location = new System.Drawing.Point(700, 622);
+            this.label_greenPowerNow.Location = new System.Drawing.Point(701, 535);
             this.label_greenPowerNow.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_greenPowerNow.Name = "label_greenPowerNow";
             this.label_greenPowerNow.Size = new System.Drawing.Size(163, 20);
@@ -183,7 +173,7 @@
             // dispersion_objectiveChoice
             // 
             this.dispersion_objectiveChoice.FormattingEnabled = true;
-            this.dispersion_objectiveChoice.Location = new System.Drawing.Point(851, 434);
+            this.dispersion_objectiveChoice.Location = new System.Drawing.Point(852, 347);
             this.dispersion_objectiveChoice.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.dispersion_objectiveChoice.Name = "dispersion_objectiveChoice";
             this.dispersion_objectiveChoice.Size = new System.Drawing.Size(234, 26);
@@ -191,7 +181,7 @@
             // 
             // button_populateObjectiveList
             // 
-            this.button_populateObjectiveList.Location = new System.Drawing.Point(704, 429);
+            this.button_populateObjectiveList.Location = new System.Drawing.Point(705, 342);
             this.button_populateObjectiveList.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_populateObjectiveList.Name = "button_populateObjectiveList";
             this.button_populateObjectiveList.Size = new System.Drawing.Size(139, 33);
@@ -205,7 +195,7 @@
             this.label_dispersionCorrection.AutoSize = true;
             this.label_dispersionCorrection.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_dispersionCorrection.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label_dispersionCorrection.Location = new System.Drawing.Point(700, 405);
+            this.label_dispersionCorrection.Location = new System.Drawing.Point(701, 318);
             this.label_dispersionCorrection.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_dispersionCorrection.Name = "label_dispersionCorrection";
             this.label_dispersionCorrection.Size = new System.Drawing.Size(158, 20);
@@ -214,7 +204,7 @@
             // 
             // button_chooseObjective
             // 
-            this.button_chooseObjective.Location = new System.Drawing.Point(704, 468);
+            this.button_chooseObjective.Location = new System.Drawing.Point(705, 381);
             this.button_chooseObjective.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_chooseObjective.Name = "button_chooseObjective";
             this.button_chooseObjective.Size = new System.Drawing.Size(139, 33);
@@ -240,7 +230,7 @@
             this.pumpLaser2Temperature.AutoSize = true;
             this.pumpLaser2Temperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaser2Temperature.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.pumpLaser2Temperature.Location = new System.Drawing.Point(1034, 355);
+            this.pumpLaser2Temperature.Location = new System.Drawing.Point(1035, 268);
             this.pumpLaser2Temperature.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaser2Temperature.Name = "pumpLaser2Temperature";
             this.pumpLaser2Temperature.Size = new System.Drawing.Size(15, 20);
@@ -252,7 +242,7 @@
             this.pumpLaser2TemperatureLabel.AutoSize = true;
             this.pumpLaser2TemperatureLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaser2TemperatureLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.pumpLaser2TemperatureLabel.Location = new System.Drawing.Point(700, 355);
+            this.pumpLaser2TemperatureLabel.Location = new System.Drawing.Point(701, 268);
             this.pumpLaser2TemperatureLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaser2TemperatureLabel.Name = "pumpLaser2TemperatureLabel";
             this.pumpLaser2TemperatureLabel.Size = new System.Drawing.Size(103, 20);
@@ -264,7 +254,7 @@
             this.pumpLaser2CurrentLabel.AutoSize = true;
             this.pumpLaser2CurrentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaser2CurrentLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.pumpLaser2CurrentLabel.Location = new System.Drawing.Point(700, 320);
+            this.pumpLaser2CurrentLabel.Location = new System.Drawing.Point(701, 233);
             this.pumpLaser2CurrentLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaser2CurrentLabel.Name = "pumpLaser2CurrentLabel";
             this.pumpLaser2CurrentLabel.Size = new System.Drawing.Size(117, 20);
@@ -276,7 +266,7 @@
             this.pumpLaser2Current.AutoSize = true;
             this.pumpLaser2Current.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaser2Current.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.pumpLaser2Current.Location = new System.Drawing.Point(1034, 320);
+            this.pumpLaser2Current.Location = new System.Drawing.Point(1035, 233);
             this.pumpLaser2Current.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaser2Current.Name = "pumpLaser2Current";
             this.pumpLaser2Current.Size = new System.Drawing.Size(15, 20);
@@ -288,7 +278,7 @@
             this.alignTunableLambda.AutoSize = true;
             this.alignTunableLambda.Font = new System.Drawing.Font("Symbol", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alignTunableLambda.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.alignTunableLambda.Location = new System.Drawing.Point(1085, 162);
+            this.alignTunableLambda.Location = new System.Drawing.Point(1086, 75);
             this.alignTunableLambda.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.alignTunableLambda.Name = "alignTunableLambda";
             this.alignTunableLambda.Size = new System.Drawing.Size(18, 20);
@@ -300,7 +290,7 @@
             this.alignFixedLambda.AutoSize = true;
             this.alignFixedLambda.Font = new System.Drawing.Font("Symbol", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alignFixedLambda.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.alignFixedLambda.Location = new System.Drawing.Point(1060, 117);
+            this.alignFixedLambda.Location = new System.Drawing.Point(1061, 30);
             this.alignFixedLambda.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.alignFixedLambda.Name = "alignFixedLambda";
             this.alignFixedLambda.Size = new System.Drawing.Size(18, 20);
@@ -312,7 +302,7 @@
             this.alignTunableLabel.AutoSize = true;
             this.alignTunableLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alignTunableLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.alignTunableLabel.Location = new System.Drawing.Point(1005, 162);
+            this.alignTunableLabel.Location = new System.Drawing.Point(1006, 75);
             this.alignTunableLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.alignTunableLabel.Name = "alignTunableLabel";
             this.alignTunableLabel.Size = new System.Drawing.Size(83, 20);
@@ -324,7 +314,7 @@
             this.alignFixedLabel.AutoSize = true;
             this.alignFixedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alignFixedLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.alignFixedLabel.Location = new System.Drawing.Point(1005, 117);
+            this.alignFixedLabel.Location = new System.Drawing.Point(1006, 30);
             this.alignFixedLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.alignFixedLabel.Name = "alignFixedLabel";
             this.alignFixedLabel.Size = new System.Drawing.Size(58, 20);
@@ -333,7 +323,7 @@
             // 
             // button_alignOFF_FixedWL
             // 
-            this.button_alignOFF_FixedWL.Location = new System.Drawing.Point(855, 111);
+            this.button_alignOFF_FixedWL.Location = new System.Drawing.Point(856, 24);
             this.button_alignOFF_FixedWL.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_alignOFF_FixedWL.Name = "button_alignOFF_FixedWL";
             this.button_alignOFF_FixedWL.Size = new System.Drawing.Size(139, 33);
@@ -344,7 +334,7 @@
             // 
             // button_align_FixedWL
             // 
-            this.button_align_FixedWL.Location = new System.Drawing.Point(704, 111);
+            this.button_align_FixedWL.Location = new System.Drawing.Point(705, 24);
             this.button_align_FixedWL.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_align_FixedWL.Name = "button_align_FixedWL";
             this.button_align_FixedWL.Size = new System.Drawing.Size(139, 33);
@@ -355,7 +345,7 @@
             // 
             // button_alignOFF_TunableWL
             // 
-            this.button_alignOFF_TunableWL.Location = new System.Drawing.Point(855, 155);
+            this.button_alignOFF_TunableWL.Location = new System.Drawing.Point(856, 68);
             this.button_alignOFF_TunableWL.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_alignOFF_TunableWL.Name = "button_alignOFF_TunableWL";
             this.button_alignOFF_TunableWL.Size = new System.Drawing.Size(139, 33);
@@ -366,7 +356,7 @@
             // 
             // button_align_TunableWL
             // 
-            this.button_align_TunableWL.Location = new System.Drawing.Point(704, 155);
+            this.button_align_TunableWL.Location = new System.Drawing.Point(705, 68);
             this.button_align_TunableWL.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_align_TunableWL.Name = "button_align_TunableWL";
             this.button_align_TunableWL.Size = new System.Drawing.Size(139, 33);
@@ -404,7 +394,7 @@
             this.pumpLaserTemperature.AutoSize = true;
             this.pumpLaserTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaserTemperature.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.pumpLaserTemperature.Location = new System.Drawing.Point(1034, 245);
+            this.pumpLaserTemperature.Location = new System.Drawing.Point(1035, 158);
             this.pumpLaserTemperature.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaserTemperature.Name = "pumpLaserTemperature";
             this.pumpLaserTemperature.Size = new System.Drawing.Size(15, 20);
@@ -416,7 +406,7 @@
             this.pumpLaserTemperatureLabel.AutoSize = true;
             this.pumpLaserTemperatureLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaserTemperatureLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.pumpLaserTemperatureLabel.Location = new System.Drawing.Point(700, 245);
+            this.pumpLaserTemperatureLabel.Location = new System.Drawing.Point(701, 158);
             this.pumpLaserTemperatureLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaserTemperatureLabel.Name = "pumpLaserTemperatureLabel";
             this.pumpLaserTemperatureLabel.Size = new System.Drawing.Size(90, 20);
@@ -428,7 +418,7 @@
             this.pumpLaserCurrentLabel.AutoSize = true;
             this.pumpLaserCurrentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaserCurrentLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.pumpLaserCurrentLabel.Location = new System.Drawing.Point(700, 208);
+            this.pumpLaserCurrentLabel.Location = new System.Drawing.Point(701, 121);
             this.pumpLaserCurrentLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaserCurrentLabel.Name = "pumpLaserCurrentLabel";
             this.pumpLaserCurrentLabel.Size = new System.Drawing.Size(104, 20);
@@ -440,7 +430,7 @@
             this.pumpLaserHours.AutoSize = true;
             this.pumpLaserHours.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaserHours.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.pumpLaserHours.Location = new System.Drawing.Point(1034, 278);
+            this.pumpLaserHours.Location = new System.Drawing.Point(1035, 191);
             this.pumpLaserHours.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaserHours.Name = "pumpLaserHours";
             this.pumpLaserHours.Size = new System.Drawing.Size(15, 20);
@@ -452,7 +442,7 @@
             this.pumpLaserHoursLabel.AutoSize = true;
             this.pumpLaserHoursLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaserHoursLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.pumpLaserHoursLabel.Location = new System.Drawing.Point(700, 278);
+            this.pumpLaserHoursLabel.Location = new System.Drawing.Point(701, 191);
             this.pumpLaserHoursLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaserHoursLabel.Name = "pumpLaserHoursLabel";
             this.pumpLaserHoursLabel.Size = new System.Drawing.Size(94, 20);
@@ -464,7 +454,7 @@
             this.pumpLaserCurrent.AutoSize = true;
             this.pumpLaserCurrent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pumpLaserCurrent.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.pumpLaserCurrent.Location = new System.Drawing.Point(1034, 208);
+            this.pumpLaserCurrent.Location = new System.Drawing.Point(1035, 121);
             this.pumpLaserCurrent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pumpLaserCurrent.Name = "pumpLaserCurrent";
             this.pumpLaserCurrent.Size = new System.Drawing.Size(15, 20);
@@ -645,18 +635,6 @@
             this.button_openShutter_TunableWL.Text = "OPEN shutter";
             this.button_openShutter_TunableWL.UseVisualStyleBackColor = true;
             this.button_openShutter_TunableWL.Click += new System.EventHandler(this.button_openShutter_Click);
-            // 
-            // label148
-            // 
-            this.label148.AutoSize = true;
-            this.label148.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label148.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label148.Location = new System.Drawing.Point(700, 24);
-            this.label148.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label148.Name = "label148";
-            this.label148.Size = new System.Drawing.Size(125, 20);
-            this.label148.TabIndex = 102;
-            this.label148.Text = "Status message";
             // 
             // errorCode
             // 
@@ -883,7 +861,7 @@
             this.errorAndon.BackColor = System.Drawing.Color.White;
             this.errorAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorAndon.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.errorAndon.Location = new System.Drawing.Point(179, 689);
+            this.errorAndon.Location = new System.Drawing.Point(67, 689);
             this.errorAndon.Name = "errorAndon";
             this.errorAndon.Size = new System.Drawing.Size(100, 60);
             this.errorAndon.TabIndex = 224;
@@ -893,7 +871,7 @@
             // button_clearError
             // 
             this.button_clearError.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_clearError.Location = new System.Drawing.Point(179, 756);
+            this.button_clearError.Location = new System.Drawing.Point(67, 756);
             this.button_clearError.Margin = new System.Windows.Forms.Padding(4);
             this.button_clearError.Name = "button_clearError";
             this.button_clearError.Size = new System.Drawing.Size(100, 26);
@@ -906,7 +884,7 @@
             // 
             this.laserStatusAndon.BackColor = System.Drawing.SystemColors.Control;
             this.laserStatusAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.laserStatusAndon.Location = new System.Drawing.Point(399, 689);
+            this.laserStatusAndon.Location = new System.Drawing.Point(287, 689);
             this.laserStatusAndon.Margin = new System.Windows.Forms.Padding(4);
             this.laserStatusAndon.MaximumSize = new System.Drawing.Size(100, 60);
             this.laserStatusAndon.MinimumSize = new System.Drawing.Size(100, 60);
@@ -921,7 +899,7 @@
             this.fixedWLshutterAndon.BackColor = System.Drawing.SystemColors.Control;
             this.fixedWLshutterAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fixedWLshutterAndon.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fixedWLshutterAndon.Location = new System.Drawing.Point(619, 689);
+            this.fixedWLshutterAndon.Location = new System.Drawing.Point(507, 689);
             this.fixedWLshutterAndon.Margin = new System.Windows.Forms.Padding(4);
             this.fixedWLshutterAndon.MaximumSize = new System.Drawing.Size(100, 60);
             this.fixedWLshutterAndon.MinimumSize = new System.Drawing.Size(100, 60);
@@ -935,7 +913,7 @@
             // 
             this.tunableWLshutterAndon.BackColor = System.Drawing.SystemColors.Control;
             this.tunableWLshutterAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tunableWLshutterAndon.Location = new System.Drawing.Point(509, 689);
+            this.tunableWLshutterAndon.Location = new System.Drawing.Point(397, 689);
             this.tunableWLshutterAndon.Margin = new System.Windows.Forms.Padding(4);
             this.tunableWLshutterAndon.MaximumSize = new System.Drawing.Size(100, 60);
             this.tunableWLshutterAndon.MinimumSize = new System.Drawing.Size(100, 60);
@@ -949,7 +927,7 @@
             // 
             this.pmtOnOffIndicator.BackColor = System.Drawing.SystemColors.Control;
             this.pmtOnOffIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pmtOnOffIndicator.Location = new System.Drawing.Point(289, 689);
+            this.pmtOnOffIndicator.Location = new System.Drawing.Point(177, 689);
             this.pmtOnOffIndicator.Margin = new System.Windows.Forms.Padding(4);
             this.pmtOnOffIndicator.MaximumSize = new System.Drawing.Size(100, 60);
             this.pmtOnOffIndicator.MinimumSize = new System.Drawing.Size(100, 60);
@@ -965,15 +943,15 @@
             this.userMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.userMessages.FormattingEnabled = true;
             this.userMessages.ItemHeight = 16;
-            this.userMessages.Location = new System.Drawing.Point(747, 689);
+            this.userMessages.Location = new System.Drawing.Point(705, 593);
             this.userMessages.Name = "userMessages";
             this.userMessages.ScrollAlwaysVisible = true;
-            this.userMessages.Size = new System.Drawing.Size(469, 84);
+            this.userMessages.Size = new System.Drawing.Size(511, 180);
             this.userMessages.TabIndex = 229;
             // 
             // timerTest
             // 
-            this.timerTest.Location = new System.Drawing.Point(974, 492);
+            this.timerTest.Location = new System.Drawing.Point(975, 405);
             this.timerTest.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.timerTest.Name = "timerTest";
             this.timerTest.Size = new System.Drawing.Size(139, 33);
@@ -987,7 +965,7 @@
             this.timerTestLabel.AutoSize = true;
             this.timerTestLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timerTestLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.timerTestLabel.Location = new System.Drawing.Point(970, 538);
+            this.timerTestLabel.Location = new System.Drawing.Point(971, 451);
             this.timerTestLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.timerTestLabel.Name = "timerTestLabel";
             this.timerTestLabel.Size = new System.Drawing.Size(19, 13);
@@ -1015,7 +993,6 @@
             this.Controls.Add(this.setGreenPower);
             this.Controls.Add(this.greenPowerNow);
             this.Controls.Add(this.greenPowerToSet);
-            this.Controls.Add(this.laserStatusMessage);
             this.Controls.Add(this.wavelengthToSet);
             this.Controls.Add(this.check_controlGreenPower);
             this.Controls.Add(this.label_greenPowerNow);
@@ -1059,7 +1036,6 @@
             this.Controls.Add(this.button_closeShutter_TunableWL);
             this.Controls.Add(this.shutterStatus_TunableWL);
             this.Controls.Add(this.button_openShutter_TunableWL);
-            this.Controls.Add(this.label148);
             this.Controls.Add(this.errorCode);
             this.Controls.Add(this.label147);
             this.Controls.Add(this.power);
@@ -1095,7 +1071,6 @@
         private System.Windows.Forms.Button setGreenPower;
         private System.Windows.Forms.Label greenPowerNow;
         private System.Windows.Forms.TextBox greenPowerToSet;
-        private System.Windows.Forms.TextBox laserStatusMessage;
         private System.Windows.Forms.TextBox wavelengthToSet;
         private System.Windows.Forms.CheckBox check_controlGreenPower;
         private System.Windows.Forms.Label label_greenPowerNow;
@@ -1139,7 +1114,6 @@
         private System.Windows.Forms.Button button_closeShutter_TunableWL;
         private System.Windows.Forms.Label shutterStatus_TunableWL;
         private System.Windows.Forms.Button button_openShutter_TunableWL;
-        private System.Windows.Forms.Label label148;
         private System.Windows.Forms.Label errorCode;
         private System.Windows.Forms.Label label147;
         private System.Windows.Forms.Label power;

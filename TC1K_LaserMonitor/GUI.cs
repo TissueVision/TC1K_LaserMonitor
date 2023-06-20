@@ -97,158 +97,6 @@ namespace TC1K_LaserMonitor
 
 
 
-
-        public void updateLaserStatus(object sender, EventArgs e)
-        {
-            try
-            {
-                var queryTask = laser.queryStatus(true);
-                if (queryTask == LaserReturnCode.BumpedFromLock)
-                {
-                    return;
-                }
-                else if (queryTask == LaserReturnCode.OK) // this means that the values are valid, NOT that the laser is ready to use
-                {
-
-                    this.Invoke(new MethodInvoker(delegate ()
-                    {
-                        if (laser.fixedShutterIsOpen)
-                        {
-                            shutterStatus_FixedWL.Text = "Open";
-                            fixedShutterAndon.set("Fixed WL shutter OPEN", andonOKColor, andonTextLightColor);
-                        }
-                        else
-                        {
-                            shutterStatus_FixedWL.Text = "Closed";
-                            fixedShutterAndon.set("Fixed WL shutter CLOSED", andonErrorColor, andonTextDarkColor);
-                        }
-                        if (laser.tunableShutterIsOpen)
-                        {
-                            shutterStatus_TunableWL.Text = "Open";
-                            tunableShutterAndon.set("Tunable WL shutter OPEN", andonOKColor, andonTextLightColor);
-                        }
-                        else
-                        {
-                            shutterStatus_TunableWL.Text = "Closed";
-                            tunableShutterAndon.set("Tunable WL shutter CLOSED", andonErrorColor, andonTextDarkColor);
-                        }
-                        if (laser.pumpLaserIsOn)
-                        {
-                            pumpLaserOnStatus.Text = "On";
-                        }
-                        else
-                        {
-                            pumpLaserOnStatus.Text = "Off";
-                        }
-                        if (laser.physicalKeyIsOn)
-                        {
-                            physicalKeyStatus.Text = "On";
-                        }
-                        else
-                        {
-                            physicalKeyStatus.Text = "Off";
-                        }
-                        if (laser.commsOK)
-                        {
-                            connectionStatus.Text = "Connected OK";
-                        }
-                        else
-                        {
-                            connectionStatus.Text = "Not connected";
-                        }
-                        wavelengthStatus.Text = Convert.ToString(laser.currentWavelength) + "nm";
-                        if (laser.modelocked) // if modelocking is not applicable to the laser, it doesn't matter because the label is hidden
-                        {
-                            modelockStatus.Text = "Yes";
-                        }
-                        else
-                        {
-                            modelockStatus.Text = "No";
-                        }
-                        power.Text = laser.currentPower.ToString("0.000000") + "W";
-                        warmupStatus.Text = Convert.ToString(laser.warmupFraction); // if warmup is not applicable to the laser, it doesn't matter because the label is hidden
-                        if (laser.laserError)
-                        {
-                            errorCode.Text = Convert.ToString(laser.errorCode);
-                        }
-                        else
-                        {
-                            errorCode.Text = "";
-                        }
-                        pumpLaserCurrent.Text = laser.pumpCurrent;
-                        pumpLaserTemperature.Text = Convert.ToString(laser.pumpTemperature);
-                        pumpLaserHours.Text = Convert.ToString(laser.pumpHours) + " h";
-                        pumpLaser2Current.Text = laser.pumpCurrent2;
-                        pumpLaser2Temperature.Text = Convert.ToString(laser.pumpTemperature);
-                        greenPowerNow.Text = laser.greenPower;
-
-                        // heartbeat to show that it's updating
-                        if (blinkerState)
-                        {
-                            blinker.BackColor = Color.Transparent;
-                            blinkerState = false;
-                        }
-                        else
-                        {
-                            blinker.BackColor = Color.MediumBlue;
-                            blinkerState = true;
-                        }
-
-                        // update andons
-                        if (laser.pumpLaserIsOn)
-                        {
-                            if (laser.stable)
-                            {
-                                readyToCollect.BackColor = Color.MediumBlue;
-                                laserStabilityAndon.set("Laser is STABLE", andonOKColor, andonTextLightColor);
-                            }
-                            else
-                            {
-                                readyToCollect.BackColor = Color.Transparent;
-                                laserStabilityAndon.set("Laser is stabilizing", andonSemiOKColor, andonTextDarkColor);
-                            }
-                        }
-                        else
-                        {
-                            readyToCollect.BackColor = Color.Transparent;
-                            laserStabilityAndon.set("Laser pump is off", andonErrorColor, andonTextDarkColor);
-                        }
-                    }));
-
-                }
-                else // including if it gets bumped from the lockout
-                {
-                    this.Invoke(new MethodInvoker(delegate ()
-                    {
-                        connectionStatus.Text = "-";
-                        wavelengthStatus.Text = "-";
-                        modelockStatus.Text = "-";
-                        power.Text = "-";
-                        warmupStatus.Text = "-";
-                        errorCode.Text = "-";
-                        pumpLaserCurrent.Text = "-";
-                        pumpLaserTemperature.Text = "-";
-                        pumpLaserHours.Text = "-";
-                        pumpLaserOnStatus.Text = "-";
-                        physicalKeyStatus.Text = "-";
-                        shutterStatus_FixedWL.Text = "-";
-                        shutterStatus_TunableWL.Text = "-";
-                        tunableWLshutterAndon.Text = "-";
-                        fixedWLshutterAndon.Text = "-";
-                        laserStatusAndon.Text = "-";
-                        tunableWLshutterAndon.BackColor = andonErrorColor;
-                        fixedWLshutterAndon.BackColor = andonErrorColor;
-                        laserStatusAndon.BackColor = andonErrorColor;
-                    }));
-                }
-            }
-            catch
-            {
-            }
-        }
-
-
-
         public void button_connectToLaser_Click(object sender, EventArgs e)
         {
             //laserGUIupdateTimer.Enabled = false;
@@ -271,7 +119,6 @@ namespace TC1K_LaserMonitor
                 laserGUIupdateTimer.Enabled = false;
             }
         }
-
 
 
         private void button_setWavelength_Click(object sender, EventArgs e)
@@ -322,23 +169,23 @@ namespace TC1K_LaserMonitor
 
         private void button_pumpOn_Click(object sender, EventArgs e)
         {
-            laserStatusMessage.Text = "Turning pump on...";
+            Rep.Post("Turning pump on...", repLevel.details, null);
             var laserTask = laser.turnPumpOnOff(true);
             if (laserTask == LaserReturnCode.OK)
             {
-                laserStatusMessage.Text = "Pump laser is turned on.";
+                Rep.Post("Pump laser is turned on.", repLevel.details, null);
             }
             else if (laserTask == LaserReturnCode.CommError)
             {
-                laserStatusMessage.Text = "Communication error!  Could not turn on pump laser.";
+                Rep.Post("Communication error!  Could not turn on pump laser.", repLevel.error, null);
             }
             else if (laserTask == LaserReturnCode.NotWarmedUp)
             {
-                laserStatusMessage.Text = "System is not warmed up!  Can not turn on pump laser yet.";
+                Rep.Post("System is not warmed up!  Can not turn on pump laser yet.", repLevel.error, null);
             }
             else
             {
-                laserStatusMessage.Text = "Error while turning on pump laser!";
+                Rep.Post("Error while turning on pump laser!", repLevel.error, null);
             }
             return;
         }
@@ -456,36 +303,37 @@ namespace TC1K_LaserMonitor
 
         private void button_chooseObjective_Click(object sender, EventArgs e)
         {
-            laserStatusMessage.Text = "Setting objective...";
+            Rep.Post("Setting objective...", repLevel.details, null);
             if (!laser.commsOK)
             {
-                laserStatusMessage.Text = "Laser is not initialized.  Activating objective failed!";
+                Rep.Post("Laser is not initialized.  Activating objective failed!", repLevel.error, null);
             }
             else if (dispersion_objectiveChoice.SelectedItem == null)
             {
-                laserStatusMessage.Text = "No objective was selected!  Activating objective failed!";
+                Rep.Post("No objective was selected!  Activating objective failed!", repLevel.error, null);
             }
             else
             {
                 laser.selectObjective(dispersion_objectiveChoice.SelectedItem.ToString());
-                laserStatusMessage.Text = "Objective " + dispersion_objectiveChoice.SelectedItem.ToString() + " is active";
+                string activeString = "Objective " + dispersion_objectiveChoice.SelectedItem.ToString() + " is active";
+                Rep.Post(activeString, repLevel.details, null);
             }
         }
 
 
         private void button_populateObjectiveList_Click(object sender, EventArgs e)
         {
-            laserStatusMessage.Text = "Getting objective list...";
+            Rep.Post("Getting objective list...", repLevel.details, null);
             if (!laser.commsOK)
             {
-                laserStatusMessage.Text = "Laser is not initialized.  Could not populate objective list!";
+                Rep.Post("Laser is not initialized.  Could not populate objective list!", repLevel.error, null);
             }
             else
             {
                 var pullObjTask = laser.pullObjectiveList();
                 if (pullObjTask != LaserReturnCode.OK)
                 {
-                    laserStatusMessage.Text = "Error while pulling objective list!";
+                    Rep.Post("Error while pulling objective list!", repLevel.error, null);
                 }
                 else
                 {
@@ -495,7 +343,7 @@ namespace TC1K_LaserMonitor
                         dispersion_objectiveChoice.Items.Add(thisChoice);
                     }
                     dispersion_objectiveChoice.SelectedIndex = 0;
-                    laserStatusMessage.Text = "Objective list is ready.";
+                    Rep.Post("Objective list is ready.", repLevel.details, null);
                 }
             }
         }
@@ -503,7 +351,7 @@ namespace TC1K_LaserMonitor
 
         private void button_setGreenPower(object sender, EventArgs e)
         {
-            laserStatusMessage.Text = "Setting green power";
+            Rep.Post("Setting green power", repLevel.details, null);
             try
             {
                 bool greenPowerOn = check_controlGreenPower.Checked;
@@ -517,21 +365,21 @@ namespace TC1K_LaserMonitor
                 {
                     if (greenPowerOn)
                     {
-                        laserStatusMessage.Text = "Green power set to " + newGreenPower.ToString();
+                        Rep.Post("Green power set to " + newGreenPower.ToString(), repLevel.details, null);
                     }
                     else
                     {
-                        laserStatusMessage.Text = "Green power mode cancelled";
+                        Rep.Post("Green power mode cancelled", repLevel.details, null);
                     }
                 }
                 else
                 {
-                    laserStatusMessage.Text = "Could not send green power command!";
+                    Rep.Post("Could not send green power command!", repLevel.error, null);
                 }
             }
             catch
             {
-                laserStatusMessage.Text = "Misc error while setting green power!";
+                Rep.Post("Misc error while setting green power!", repLevel.error, null);
             }
             return;
         }
@@ -642,13 +490,9 @@ namespace TC1K_LaserMonitor
                 if (sw.ElapsedMilliseconds > timeout_ms)
                 {
                     Rep.Post("Button action timed out!", repLevel.error, null);
-                    break;
+                    return;
                 }
             }
-
-
-
-
 
             int delay_ms = 2000;
             System.Threading.Thread.Sleep(delay_ms);
@@ -668,6 +512,17 @@ namespace TC1K_LaserMonitor
                 return;
             }
             queryInProgress = true;
+
+
+            int timeSecs = DateTime.Now.Second;
+            this.Invoke(new MethodInvoker(delegate()
+            {
+                string timerStr = "timer action start. " + timeSecs.ToString();
+                timerTestLabel.Text = timerStr;
+                Rep.Post(timerStr, repLevel.details, null);
+            }));
+
+
             int delay_ms = 2000;
             System.Threading.Thread.Sleep(delay_ms);
             queryInProgress = false;
@@ -675,11 +530,163 @@ namespace TC1K_LaserMonitor
 
             this.Invoke(new MethodInvoker(delegate()
             {
-                int timeSecs = DateTime.Now.Second;
-                string timerStr = "timer action. " + timeSecs.ToString();
+                string timerStr = "timer action done. " + timeSecs.ToString();
                 timerTestLabel.Text = timerStr;
                 Rep.Post(timerStr, repLevel.details, null);
             }));
+
+
+        }
+
+
+
+        public void updateLaserStatus(object sender, EventArgs e)
+        {
+            try
+            {
+                var queryTask = laser.queryStatus(true);
+                if (queryTask == LaserReturnCode.BumpedFromLock)
+                {
+                    return;
+                }
+                else if (queryTask == LaserReturnCode.OK) // this means that the values are valid, NOT that the laser is ready to use
+                {
+
+                    this.Invoke(new MethodInvoker(delegate()
+                    {
+                        if (laser.fixedShutterIsOpen)
+                        {
+                            shutterStatus_FixedWL.Text = "Open";
+                            fixedShutterAndon.set("Fixed WL shutter OPEN", andonOKColor, andonTextLightColor);
+                        }
+                        else
+                        {
+                            shutterStatus_FixedWL.Text = "Closed";
+                            fixedShutterAndon.set("Fixed WL shutter CLOSED", andonErrorColor, andonTextDarkColor);
+                        }
+                        if (laser.tunableShutterIsOpen)
+                        {
+                            shutterStatus_TunableWL.Text = "Open";
+                            tunableShutterAndon.set("Tunable WL shutter OPEN", andonOKColor, andonTextLightColor);
+                        }
+                        else
+                        {
+                            shutterStatus_TunableWL.Text = "Closed";
+                            tunableShutterAndon.set("Tunable WL shutter CLOSED", andonErrorColor, andonTextDarkColor);
+                        }
+                        if (laser.pumpLaserIsOn)
+                        {
+                            pumpLaserOnStatus.Text = "On";
+                        }
+                        else
+                        {
+                            pumpLaserOnStatus.Text = "Off";
+                        }
+                        if (laser.physicalKeyIsOn)
+                        {
+                            physicalKeyStatus.Text = "On";
+                        }
+                        else
+                        {
+                            physicalKeyStatus.Text = "Off";
+                        }
+                        if (laser.commsOK)
+                        {
+                            connectionStatus.Text = "Connected OK";
+                        }
+                        else
+                        {
+                            connectionStatus.Text = "Not connected";
+                        }
+                        wavelengthStatus.Text = Convert.ToString(laser.currentWavelength) + "nm";
+                        if (laser.modelocked) // if modelocking is not applicable to the laser, it doesn't matter because the label is hidden
+                        {
+                            modelockStatus.Text = "Yes";
+                        }
+                        else
+                        {
+                            modelockStatus.Text = "No";
+                        }
+                        power.Text = laser.currentPower.ToString("0.000000") + "W";
+                        warmupStatus.Text = Convert.ToString(laser.warmupFraction); // if warmup is not applicable to the laser, it doesn't matter because the label is hidden
+                        if (laser.laserError)
+                        {
+                            errorCode.Text = Convert.ToString(laser.errorCode);
+                        }
+                        else
+                        {
+                            errorCode.Text = "";
+                        }
+                        pumpLaserCurrent.Text = laser.pumpCurrent;
+                        pumpLaserTemperature.Text = Convert.ToString(laser.pumpTemperature);
+                        pumpLaserHours.Text = Convert.ToString(laser.pumpHours) + " h";
+                        pumpLaser2Current.Text = laser.pumpCurrent2;
+                        pumpLaser2Temperature.Text = Convert.ToString(laser.pumpTemperature);
+                        greenPowerNow.Text = laser.greenPower;
+
+                        // heartbeat to show that it's updating
+                        if (blinkerState)
+                        {
+                            blinker.BackColor = Color.Transparent;
+                            blinkerState = false;
+                        }
+                        else
+                        {
+                            blinker.BackColor = Color.MediumBlue;
+                            blinkerState = true;
+                        }
+
+                        // update andons
+                        if (laser.pumpLaserIsOn)
+                        {
+                            if (laser.stable)
+                            {
+                                readyToCollect.BackColor = Color.MediumBlue;
+                                laserStabilityAndon.set("Laser is STABLE", andonOKColor, andonTextLightColor);
+                            }
+                            else
+                            {
+                                readyToCollect.BackColor = Color.Transparent;
+                                laserStabilityAndon.set("Laser is stabilizing", andonSemiOKColor, andonTextDarkColor);
+                            }
+                        }
+                        else
+                        {
+                            readyToCollect.BackColor = Color.Transparent;
+                            laserStabilityAndon.set("Laser pump is off", andonErrorColor, andonTextDarkColor);
+                        }
+                    }));
+
+                }
+                else // including if it gets bumped from the lockout
+                {
+                    this.Invoke(new MethodInvoker(delegate()
+                    {
+                        connectionStatus.Text = "-";
+                        wavelengthStatus.Text = "-";
+                        modelockStatus.Text = "-";
+                        power.Text = "-";
+                        warmupStatus.Text = "-";
+                        errorCode.Text = "-";
+                        pumpLaserCurrent.Text = "-";
+                        pumpLaserTemperature.Text = "-";
+                        pumpLaserHours.Text = "-";
+                        pumpLaserOnStatus.Text = "-";
+                        physicalKeyStatus.Text = "-";
+                        shutterStatus_FixedWL.Text = "-";
+                        shutterStatus_TunableWL.Text = "-";
+                        tunableWLshutterAndon.Text = "-";
+                        fixedWLshutterAndon.Text = "-";
+                        laserStatusAndon.Text = "-";
+                        tunableWLshutterAndon.BackColor = andonErrorColor;
+                        fixedWLshutterAndon.BackColor = andonErrorColor;
+                        laserStatusAndon.BackColor = andonErrorColor;
+                    }));
+                }
+            }
+            catch
+            {
+            }
         }
 
 

@@ -2,9 +2,10 @@ laserPort,COM3
 laserType,MaiTai
 fakeOutLaser,false
 wavelength,820
+T_sample_s,30
 laserPowerMinFrac,0.9
 laserPowerMaxFrac,1.1
-killOrchestratorOnLaserFluctuation,true
+terminateOrchestratorOnDrift,true
 enableLaserWatchdog,true
 laserGUIUpdateInterval_ms,500
 laserMinOKPower_W,1

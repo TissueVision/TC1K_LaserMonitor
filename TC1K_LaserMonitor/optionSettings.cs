@@ -13,9 +13,10 @@ namespace TC1K_LaserMonitor
         public int wavelength { get; set; }
 
         // fluctuation monitoring
+        public int T_sample_s { get; set; }
         public double laserPowerMinFrac { get; set; }
         public double laserPowerMaxFrac { get; set; }
-        public bool killOrchestratorOnLaserFluctuation { get; set; }
+        public bool terminateOrchestratorOnDrift { get; set; }
 
         // misc monitoring
         public bool enableLaserWatchdog { get; set; }

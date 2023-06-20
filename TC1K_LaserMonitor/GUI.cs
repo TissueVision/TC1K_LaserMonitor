@@ -6,14 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace TC1K_LaserMonitor
 {
     public partial class GUI : Form
     {
+        // major objects
+        Laser laser = new Laser();
         public Reporter Rep = new Reporter();
         public optionSettings optionSettings = new optionSettings();
-        string optionSettingsPath = @"C:\TissueVision\LaserMonitor\optionSettings.csv";
         public SettingsFileHandler settingsFileHandler = new SettingsFileHandler();
 
         // timer
@@ -21,18 +23,24 @@ namespace TC1K_LaserMonitor
         public double laserGUIUpdateInterval_ms = 1000;
         bool blinkerState = false;
 
-        Laser laser = new Laser();
+        // misc
+        bool queryInProgress = false;
+        bool baselineCollected = false;
 
         // andons
         public Andon fixedShutterAndon = new Andon();
         public Andon tunableShutterAndon = new Andon();
         public Andon laserStabilityAndon = new Andon();
+        public Andon monitorOKAndonObj = new Andon();
         public Color andonOKColor = Color.LimeGreen;
         public Color andonSemiOKColor = Color.Yellow;
         public Color andonErrorColor = Color.GhostWhite;
         public Color andonTextDarkColor = Color.Gray;
         public Color andonTextLightColor = Color.White;
 
+        // values
+        string optionSettingsPath = @"C:\TissueVision\LaserMonitor\optionSettings.csv";
+        string localLogDirectory = @"C:\TissueVision\LaserMonitor\Logs";
 
 
 
@@ -50,7 +58,15 @@ namespace TC1K_LaserMonitor
             Rep.errorAndon.control = errorAndon;
             Rep.messageCtrl = userMessages;
             Rep.initialize();
-            
+
+            // create local log
+            if (!System.IO.Directory.Exists(localLogDirectory))
+            {
+                Directory.CreateDirectory(localLogDirectory);
+            }
+            Rep.logPath = Path.Combine(localLogDirectory, "LocalLog_" + createNowString(false)) + ".txt";
+            Rep.logEnabled = true;
+
             // load settings file, etc.
             settingsFileHandler.Rep = Rep;
             bool thisFileLoadedOK;
@@ -63,12 +79,14 @@ namespace TC1K_LaserMonitor
                 return;
             }
 
-            // initialize the laser
-            laser.gui = this;
-            laser.Rep = Rep;
-            laser.optionSettings = optionSettings;
-            laser.fakeOut = optionSettings.fakeOutLaser;
-            laser.closeAll();
+            // set andons
+            fixedShutterAndon.control = fixedWLshutterAndon;
+            tunableShutterAndon.control = tunableWLshutterAndon;
+            laserStabilityAndon.control = laserStatusAndon;
+            monitorOKAndonObj.control = monitorOKAndon;
+            updateMonitorAndon();
+
+            // configure the laser
             if ( (optionSettings.laserType == "MaiTai") || optionSettings.fakeOutLaser)
             {
                 laser = new laser_MaiTai();
@@ -86,11 +104,14 @@ namespace TC1K_LaserMonitor
                 Rep.Post("Invalid laser type " + optionSettings.laserType, repLevel.error, null);
                 return;
             }
+            laser.gui = this;
+            laser.Rep = Rep;
+            laser.optionSettings = optionSettings;
+            laser.fakeOut = optionSettings.fakeOutLaser;
             laser.comID = optionSettings.laserPort;
             laser.minOKPower = optionSettings.laserMinOKPower_W;
             laser.enableWatchdog = optionSettings.enableLaserWatchdog;
             setLaserButtonVisibilities(optionSettings.laserType);
-            //gui.laserGUIupdateTimer.Enabled = false;
             System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
 
         }
@@ -99,30 +120,32 @@ namespace TC1K_LaserMonitor
 
         public void button_connectToLaser_Click(object sender, EventArgs e)
         {
-            //laserGUIupdateTimer.Enabled = false;
+            if (getQueryLock() == false) { return; }
+
+            laser.closeAll();
             System.Threading.Thread.Sleep((int)laserGUIUpdateInterval_ms);
-            laser.enableWatchdog = optionSettings.enableLaserWatchdog;
-            laser.fakeOut = optionSettings.fakeOutLaser;
-            laser.Rep = Rep;
             if (laser.initialize() == TaskEnd.OK)
             {
-            // Create a timer
-            laserGUIupdateTimer = new System.Timers.Timer(laserGUIUpdateInterval_ms);
-            //laserGUIupdateTimer.Elapsed += updateLaserStatus; // Hook up the Elapsed event for the timer. 
-            laserGUIupdateTimer.Elapsed += testTimerUpdate; // Hook up the Elapsed event for the timer. 
-
-            laserGUIupdateTimer.AutoReset = true;
-            laserGUIupdateTimer.Enabled = true;
+                // create a timer
+                laserGUIupdateTimer = new System.Timers.Timer(laserGUIUpdateInterval_ms);
+                laserGUIupdateTimer.Elapsed += updateLaserStatus; // Hook up the Elapsed event for the timer.
+                laserGUIupdateTimer.AutoReset = true;
+                laserGUIupdateTimer.Enabled = true;
+                queryInProgress = false;
+                collectBaseline_Click(null, null);
             }
             else
             {
                 laserGUIupdateTimer.Enabled = false;
+                queryInProgress = false;
             }
         }
 
 
         private void button_setWavelength_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; } 
+
             double wavelength;
             try
             {
@@ -133,12 +156,15 @@ namespace TC1K_LaserMonitor
             {
                 Rep.Post("Wavelength setting failed!", repLevel.error, null);
             }
-            return;
+
+            queryInProgress = false;
         }
 
 
         private void button_openShutter_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             Laser.ShutterType shutterType = Laser.ShutterType.NotSet;
             if (((Button)sender).Name == "button_openShutter_FixedWL")
             {
@@ -149,11 +175,15 @@ namespace TC1K_LaserMonitor
                 shutterType = Laser.ShutterType.TunableWavelength;
             }
             var shutterTask = laser.setShutter(true, shutterType);
+
+            queryInProgress = false;
         }
 
 
         private void button_closeShutter_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             Laser.ShutterType shutterType = Laser.ShutterType.NotSet;
             if (((Button)sender).Name == "button_closeShutter_FixedWL")
             {
@@ -164,11 +194,15 @@ namespace TC1K_LaserMonitor
                 shutterType = Laser.ShutterType.TunableWavelength;
             }
             var shutterTask = laser.setShutter(false, shutterType);
+
+            queryInProgress = false;
         }
 
 
         private void button_pumpOn_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             Rep.Post("Turning pump on...", repLevel.details, null);
             var laserTask = laser.turnPumpOnOff(true);
             if (laserTask == LaserReturnCode.OK)
@@ -187,29 +221,39 @@ namespace TC1K_LaserMonitor
             {
                 Rep.Post("Error while turning on pump laser!", repLevel.error, null);
             }
-            return;
+
+            queryInProgress = false;
         }
 
 
         private void button_pumpOff_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             var laserTask = laser.turnPumpOnOff(false);
+
+            queryInProgress = false;
         }
 
 
         private void shutDownLaser(object sender, EventArgs e) // only InsightX3 needs this
         {
+            if (getQueryLock() == false) { return; }
+
             var laserTask = laser.shutDown();
             laserGUIupdateTimer.Enabled = false;
             laser.readyCloseApp();
             laser._serialPort.Close();
             laser.commsOK = false;
-            return;
+
+            queryInProgress = false;
         }
 
 
         private void button_disconnectPumpOn_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             // close shutter(s)
             if (laser.tunableShutterIsOpen)
             {
@@ -231,21 +275,28 @@ namespace TC1K_LaserMonitor
             {
                 Rep.Post("OK to close App", repLevel.details, null);
             }
+
+            queryInProgress = false;
         }
 
 
         private void button_disconnectPumpOff_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             // turn off pump
             laser.turnPumpOnOff(false);
             // call other function which does the rest
             button_disconnectPumpOn_Click(null, null);
-            return;
+
+            queryInProgress = false;
         }
 
 
         private void button_setAlignMode_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             bool onOff = false;
             Laser.ShutterType output = Laser.ShutterType.NotSet;
             if (((Button)sender).Name == "button_align_FixedWL")
@@ -297,12 +348,15 @@ namespace TC1K_LaserMonitor
                 laserMessage = "Error while setting alignment mode!";
             }
             Rep.Post(laserMessage, repLevel.details, null);
-            return;
+
+            queryInProgress = false;
         }
 
 
         private void button_chooseObjective_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             Rep.Post("Setting objective...", repLevel.details, null);
             if (!laser.commsOK)
             {
@@ -318,11 +372,15 @@ namespace TC1K_LaserMonitor
                 string activeString = "Objective " + dispersion_objectiveChoice.SelectedItem.ToString() + " is active";
                 Rep.Post(activeString, repLevel.details, null);
             }
+
+            queryInProgress = false;
         }
 
 
         private void button_populateObjectiveList_Click(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             Rep.Post("Getting objective list...", repLevel.details, null);
             if (!laser.commsOK)
             {
@@ -346,11 +404,15 @@ namespace TC1K_LaserMonitor
                     Rep.Post("Objective list is ready.", repLevel.details, null);
                 }
             }
+
+            queryInProgress = false;
         }
 
 
         private void button_setGreenPower(object sender, EventArgs e)
         {
+            if (getQueryLock() == false) { return; }
+
             Rep.Post("Setting green power", repLevel.details, null);
             try
             {
@@ -381,7 +443,8 @@ namespace TC1K_LaserMonitor
             {
                 Rep.Post("Misc error while setting green power!", repLevel.error, null);
             }
-            return;
+
+            queryInProgress = false;
         }
 
 
@@ -391,8 +454,7 @@ namespace TC1K_LaserMonitor
             Rep.ClearCancelAll();
         }
 
-
-
+        
         public void setLaserButtonVisibilities(string laserType)
         {
             if (laserType == "MaiTai")
@@ -401,19 +463,13 @@ namespace TC1K_LaserMonitor
                 button_closeShutter_FixedWL.Visible = false;
                 button_openShutter_FixedWL.Visible = false;
                 shutterStatus_FixedWL.Visible = false;
-                fixedWavelengthLabel.Visible = false;
-                fixedLambdaLabel.Visible = false;
                 button_shutDownLaser.Visible = false;
                 pumpLaserHours.Visible = false;
                 pumpLaserHoursLabel.Visible = false;
                 button_align_FixedWL.Visible = false;
                 button_alignOFF_FixedWL.Visible = false;
-                alignFixedLabel.Visible = false;
-                alignFixedLambda.Visible = false;
                 button_align_TunableWL.Visible = false;
                 button_alignOFF_TunableWL.Visible = false;
-                alignTunableLabel.Visible = false;
-                alignTunableLambda.Visible = false;
                 button_chooseObjective.Visible = false;
                 button_populateObjectiveList.Visible = false;
                 dispersion_objectiveChoice.Visible = false;
@@ -428,8 +484,6 @@ namespace TC1K_LaserMonitor
                 pumpLaser2TemperatureLabel.Visible = false;
                 button_align_FixedWL.Visible = false;
                 button_alignOFF_FixedWL.Visible = false;
-                alignFixedLabel.Visible = false;
-                alignFixedLambda.Visible = false;
                 check_controlGreenPower.Visible = false;
                 label_greenPowerNow.Visible = false;
                 greenPowerNow.Visible = false;
@@ -467,14 +521,25 @@ namespace TC1K_LaserMonitor
 
         }
 
-
-
+        
         private void timerTest_Click(object sender, EventArgs e)
         {
             int thisButtonActionID = DateTime.Now.Second;
             Rep.Post("Button pressed... " + thisButtonActionID.ToString(), repLevel.details, null);
 
+            if (getQueryLock() == false) { return; }
 
+            int delay_ms = 2000;
+            System.Threading.Thread.Sleep(delay_ms);
+            Rep.Post("Button action done! " + thisButtonActionID.ToString(), repLevel.details, null);
+
+            queryInProgress = false;
+
+        }
+
+
+        private bool getQueryLock()
+        {
             // wait for query to be available, or timeout
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
@@ -484,27 +549,18 @@ namespace TC1K_LaserMonitor
                 if (queryInProgress == false)
                 {
                     queryInProgress = true;
-                    Rep.Post("Button action started... " + thisButtonActionID.ToString(), repLevel.details, null);
-                    break;
+                    //Rep.Post("Obtained query lock...", repLevel.details, null);
+                    return(true);
                 }
                 if (sw.ElapsedMilliseconds > timeout_ms)
                 {
-                    Rep.Post("Button action timed out!", repLevel.error, null);
-                    return;
+                    Rep.Post("Query lock timed out!", repLevel.error, null);
+                    return (false);
                 }
             }
-
-            int delay_ms = 2000;
-            System.Threading.Thread.Sleep(delay_ms);
-            Rep.Post("Button action done! " + thisButtonActionID.ToString(), repLevel.details, null);
-            queryInProgress = false;
-
         }
+        
 
-
-
-
-        bool queryInProgress = false;
         public void testTimerUpdate(object sender, EventArgs e)
         {
             if (queryInProgress)
@@ -537,16 +593,22 @@ namespace TC1K_LaserMonitor
 
 
         }
-
-
+        
 
         public void updateLaserStatus(object sender, EventArgs e)
         {
+            if (queryInProgress)
+            {
+                return;
+            }
+            queryInProgress = true;
+
             try
             {
                 var queryTask = laser.queryStatus(true);
                 if (queryTask == LaserReturnCode.BumpedFromLock)
                 {
+                    queryInProgress = false;
                     return;
                 }
                 else if (queryTask == LaserReturnCode.OK) // this means that the values are valid, NOT that the laser is ready to use
@@ -655,6 +717,22 @@ namespace TC1K_LaserMonitor
                             readyToCollect.BackColor = Color.Transparent;
                             laserStabilityAndon.set("Laser pump is off", andonErrorColor, andonTextDarkColor);
                         }
+
+                        // monitor laser power (the whole point of this app!)
+                        if (baselineCollected)
+                        {
+                            bool powerOK = laser.checkLaserFluctuationsOK(laser.currentPower);
+                            if (!powerOK)
+                            {
+                                string powerString = String.Format("Laser power {0}W exceeds range of {1}-{2}x {3}W!");
+                                Rep.Post(powerString, repLevel.error, null);
+                                if (optionSettings.terminateOrchestratorOnDrift)
+                                {
+                                    terminateOrchestrator();
+                                }
+                            }
+                        }
+
                     }));
 
                 }
@@ -684,9 +762,97 @@ namespace TC1K_LaserMonitor
                     }));
                 }
             }
-            catch
+            catch (Exception ex)
             {
             }
+
+            queryInProgress = false;
+        }
+
+
+        public string createNowString(bool includeMillisecond)
+        {
+            DateTime now = DateTime.Now;
+            string nowString = String.Format("{0}-{1:00}-{2:00}_{3:00}h{4:00}m{5:00}s", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
+            if (includeMillisecond)
+            {
+                nowString = nowString + String.Format("{0:000}ms", now.Millisecond);
+            }
+            return (nowString);
+        }
+
+
+        private void collectBaseline_Click(object sender, EventArgs e)
+        {
+            if (getQueryLock() == false) { return; }
+
+            var baselineOK = laser.collectBaselinePower();
+            if (baselineOK == LaserReturnCode.OK)
+            {
+                baseline_W.Text = String.Format("{0:F2}", laser.baselineLaserPower);
+                baselineCollected = true;
+            }
+            else
+            {
+                baseline_W.Text = "invalid";
+                baselineCollected = false;
+            }
+
+            queryInProgress = false;
+        }
+        
+
+        private void updateMonitorAndon()
+        {
+            if (baselineCollected && optionSettings.terminateOrchestratorOnDrift)
+            {
+                monitorOKAndonObj.set("Monitor is ON", andonOKColor, andonTextLightColor);
+            }
+            else
+            {
+                monitorOKAndonObj.set("Monitor is off", andonErrorColor, andonTextDarkColor);
+            }
+        }
+
+        
+        private void terminateOrchestrator()
+        {
+            // Get all processes running on the local computer.
+            System.Diagnostics.Process[] localAll = System.Diagnostics.Process.GetProcesses();
+
+            // Get all instances of DssHost running on the local computer.
+            // This will return an empty array if DssHost isn't running.
+            string procName = "DssHost";
+            System.Diagnostics.Process[] localByName = System.Diagnostics.Process.GetProcessesByName(procName);
+            if (localByName.Length==0)
+            {
+                Rep.Post("Could not get DssHost process! Could not terminate orchestrator!", repLevel.error, null);
+                return;
+            }
+            else
+            {
+                if (localByName.Length > 1)
+                {
+                    Rep.Post("Multiple DssHost processes were found! " + localByName.Length.ToString(), repLevel.error, null);
+                    return;
+                }
+                try
+                {
+                    localByName[0].Kill();
+                    Rep.Post("Orchestrator was terminated!", repLevel.details, null);
+                }
+                catch (Exception ex)
+                {
+                    Rep.Post("Exception while attempting to terminate Orchestrator!", repLevel.error, ex.Message);
+                }
+            }
+        }
+
+
+        private void terminateOrchestratorOnDrift_CheckedChanged(object sender, EventArgs e)
+        {
+            // the value of optionSettings.terminateOrchestratorOnDrift gets updated automatically, then this affects the andon
+            updateMonitorAndon();
         }
 
 

@@ -93,6 +93,7 @@ namespace TC1K_LaserMonitor
         public string newLineChar = null; // the character(s) that indicate the end of a line read from the serial port
         public string serialNum = "SN not implemented";
         public double relativeHumidity = -1; // this is not implemented yet!
+        public double baselineLaserPower = 0;
 
         // Spectra lasers
         public double warmupFraction = 0;
@@ -114,6 +115,7 @@ namespace TC1K_LaserMonitor
             initializing = true;
             commsOK = false;
             laserError = false;
+            resetErrorCounts();
             lockout = new Lockout();
             lockout.name = "Laser";
             lockout.Rep = Rep;
@@ -482,6 +484,75 @@ namespace TC1K_LaserMonitor
                 _serialPort.Dispose();
             }
         }
+
+
+        // pass it a power reading, and it tells you whether or not it's within the allowed fluctuation band 
+        public bool checkLaserFluctuationsOK(double thisPower_W) 
+        {
+            bool fluctuationsOK = false;
+            try 
+            {
+
+                bool tooLow = thisPower_W < optionSettings.laserPowerMinFrac * baselineLaserPower;
+                bool tooHigh = thisPower_W > optionSettings.laserPowerMaxFrac * baselineLaserPower;
+                if (tooLow || tooHigh)
+                {
+                    fluctuationsOK = false;
+                }
+                else
+                {
+                    fluctuationsOK = true;
+                }
+            } 
+            catch (Exception ex) 
+            {
+                Rep.Post("An exception occurred while checking laser fluctuations!", repLevel.error, null);
+            } 
+            return (fluctuationsOK); 
+        } 
+ 
+ 
+ 
+        public LaserReturnCode collectBaselinePower() 
+        {
+            string baselineString = String.Format("Collecting baseline laser power...", baselineLaserPower);
+            Rep.Post(baselineString, repLevel.details, null);
+
+            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch(); 
+            stopWatch.Start(); 
+            double powerRunningTotal = 0; 
+            double nPowerPoints = 0; 
+            int nMaxQueryAttempts = 5; 
+            while (stopWatch.Elapsed.TotalSeconds < optionSettings.T_sample_s) 
+            { 
+                bool querySucceeded = false; 
+                for (int jnd = 0; jnd < nMaxQueryAttempts; jnd++) 
+                { 
+                    var queryOK = queryStatus(false); 
+                    if (queryOK == LaserReturnCode.OK) 
+                    { 
+                        querySucceeded = true; 
+                        break; 
+                    } 
+                } 
+                if (querySucceeded) 
+                { 
+                    powerRunningTotal = powerRunningTotal + currentPower; 
+                    nPowerPoints = nPowerPoints + 1; 
+                } 
+                else 
+                { 
+                    Rep.Post("Failure while collecting baseline laser!", repLevel.error, null);
+                    return (LaserReturnCode.CommError); 
+                } 
+            }
+            baselineLaserPower = powerRunningTotal / nPowerPoints;
+            baselineString = String.Format("Baseline laser power established at {0:F2} W", baselineLaserPower);
+            Rep.Post(baselineString, repLevel.details, null);
+
+            return (LaserReturnCode.OK); 
+        } 
+
 
 
 

@@ -47,6 +47,21 @@ namespace TC1K_LaserMonitor
             {
                 return (LaserReturnCode.CommError);
             }
+            if (fakeOut)
+            {
+                lastQueryOK = true;
+                physicalKeyIsOn = true;
+                pumpLaserIsOn = true;
+                currentWavelength = 777;
+                tunableShutterIsOpen = true;
+                fixedShutterIsOpen = false;
+                currentPower = 7.77;
+                laserError = false;
+                errorCode = "77777";
+                checkLaserReady();
+                return (LaserReturnCode.OK);
+            }
+
             Lockout.LockoutReturn lockOK = lockout.requestLock(calledByUpdateGUI);
             if (lockOK != Lockout.LockoutReturn.OK)
             {

@@ -16,9 +16,11 @@ namespace TC1K_LaserMonitor
         string optionSettingsPath = @"C:\TissueVision\LaserMonitor\optionSettings.csv";
         public SettingsFileHandler settingsFileHandler = new SettingsFileHandler();
 
+        // timer
         public System.Timers.Timer laserGUIupdateTimer = new System.Timers.Timer(); // triggers updating the laser
         public double laserGUIUpdateInterval_ms = 1000;
         bool blinkerState = false;
+
         Laser laser = new Laser();
 
         // andons
@@ -48,19 +50,48 @@ namespace TC1K_LaserMonitor
             Rep.errorAndon.control = errorAndon;
             Rep.messageCtrl = userMessages;
             Rep.initialize();
-
-
-            laser.gui = this;
-            laser.Rep = Rep;
-            laser.optionSettings = optionSettings;
-
+            
             // load settings file, etc.
             settingsFileHandler.Rep = Rep;
             bool thisFileLoadedOK;
             optionSettings = (optionSettings)settingsFileHandler.loadSettingsFile(out thisFileLoadedOK, optionSettingsPath, optionSettings);
-            //optionSettingsBindingSource.DataSource = optionSettings;
-            //optionSettingsBindingSource.ResetBindings(false);
+            optionSettingsBindingSource.DataSource = optionSettings;
+            optionSettingsBindingSource.ResetBindings(false);
+            if (!thisFileLoadedOK)
+            {
+                Rep.Post("Failed to load settings file! Initialization failed!", repLevel.error, null);
+                return;
+            }
 
+            // initialize the laser
+            laser.gui = this;
+            laser.Rep = Rep;
+            laser.optionSettings = optionSettings;
+            laser.fakeOut = optionSettings.fakeOutLaser;
+            laser.closeAll();
+            if ( (optionSettings.laserType == "MaiTai") || optionSettings.fakeOutLaser)
+            {
+                laser = new laser_MaiTai();
+            }
+            else if (optionSettings.laserType == "DiscoveryNX")
+            {
+                laser = new laser_Discovery();
+            }
+            else if (optionSettings.laserType == "InsightX3")
+            {
+                laser = new laser_InsightX3();
+            }
+            else
+            {
+                Rep.Post("Invalid laser type " + optionSettings.laserType, repLevel.error, null);
+                return;
+            }
+            laser.comID = optionSettings.laserPort;
+            laser.minOKPower = optionSettings.laserMinOKPower_W;
+            laser.enableWatchdog = optionSettings.enableLaserWatchdog;
+            setLaserButtonVisibilities(optionSettings.laserType);
+            //gui.laserGUIupdateTimer.Enabled = false;
+            System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
 
         }
 
@@ -217,96 +248,23 @@ namespace TC1K_LaserMonitor
         }
 
 
-        public void setLaserButtonVisibilities(string laserType)
-        {
-            if (laserType == "MaiTai")
-            {
-                laserTypeLabel.Text = "Spectra-Physics MaiTai";
-                button_closeShutter_FixedWL.Visible = false;
-                button_openShutter_FixedWL.Visible = false;
-                shutterStatus_FixedWL.Visible = false;
-                fixedWavelengthLabel.Visible = false;
-                fixedLambdaLabel.Visible = false;
-                button_shutDownLaser.Visible = false;
-                pumpLaserHours.Visible = false;
-                pumpLaserHoursLabel.Visible = false;
-                button_align_FixedWL.Visible = false;
-                button_alignOFF_FixedWL.Visible = false;
-                alignFixedLabel.Visible = false;
-                alignFixedLambda.Visible = false;
-                button_align_TunableWL.Visible = false;
-                button_alignOFF_TunableWL.Visible = false;
-                alignTunableLabel.Visible = false;
-                alignTunableLambda.Visible = false;
-                button_chooseObjective.Visible = false;
-                button_populateObjectiveList.Visible = false;
-                dispersion_objectiveChoice.Visible = false;
-                label_dispersionCorrection.Visible = false;
-            }
-            else if (laserType == "InsightX3")
-            {
-                laserTypeLabel.Text = "Spectra-Physics InsightX3";
-                pumpLaser2Current.Visible = false;
-                pumpLaser2CurrentLabel.Visible = false;
-                pumpLaser2Temperature.Visible = false;
-                pumpLaser2TemperatureLabel.Visible = false;
-                button_align_FixedWL.Visible = false;
-                button_alignOFF_FixedWL.Visible = false;
-                alignFixedLabel.Visible = false;
-                alignFixedLambda.Visible = false;
-                check_controlGreenPower.Visible = false;
-                label_greenPowerNow.Visible = false;
-                greenPowerNow.Visible = false;
-                greenPowerToSet.Visible = false;
-                setGreenPower.Visible = false;
-            }
-            else if (laserType == "DiscoveryNX")
-            {
-                laserTypeLabel.Text = "Coherent Discovery NX";
-                modelockLabel.Visible = false;
-                modelockStatus.Visible = false;
-                warmupStatus.Visible = false;
-                warmupPctLabel.Visible = false;
-                button_shutDownLaser.Visible = false;
-                pumpLaserCurrent.Visible = false;
-                pumpLaserCurrentLabel.Visible = false;
-                pumpLaserTemperature.Visible = false;
-                pumpLaserTemperatureLabel.Visible = false;
-                pumpLaserHours.Visible = false;
-                pumpLaserHoursLabel.Visible = false;
-                pumpLaser2Current.Visible = false;
-                pumpLaser2CurrentLabel.Visible = false;
-                pumpLaser2Temperature.Visible = false;
-                pumpLaser2TemperatureLabel.Visible = false;
-                check_controlGreenPower.Visible = false;
-                label_greenPowerNow.Visible = false;
-                greenPowerNow.Visible = false;
-                greenPowerToSet.Visible = false;
-                setGreenPower.Visible = false;
-            }
-            else
-            {
-                Rep.Post("Invalid laser type " + laserType, repLevel.error, null);
-            }
-
-        }
-
-
 
         public void button_connectToLaser_Click(object sender, EventArgs e)
         {
-            laserGUIupdateTimer.Enabled = false;
+            //laserGUIupdateTimer.Enabled = false;
             System.Threading.Thread.Sleep((int)laserGUIUpdateInterval_ms);
             laser.enableWatchdog = optionSettings.enableLaserWatchdog;
             laser.fakeOut = optionSettings.fakeOutLaser;
             laser.Rep = Rep;
             if (laser.initialize() == TaskEnd.OK)
             {
-                // Create a timer
-                laserGUIupdateTimer = new System.Timers.Timer(laserGUIUpdateInterval_ms);
-                laserGUIupdateTimer.Elapsed += updateLaserStatus; // Hook up the Elapsed event for the timer. 
-                laserGUIupdateTimer.AutoReset = true;
-                laserGUIupdateTimer.Enabled = true;
+            // Create a timer
+            laserGUIupdateTimer = new System.Timers.Timer(laserGUIUpdateInterval_ms);
+            //laserGUIupdateTimer.Elapsed += updateLaserStatus; // Hook up the Elapsed event for the timer. 
+            laserGUIupdateTimer.Elapsed += testTimerUpdate; // Hook up the Elapsed event for the timer. 
+
+            laserGUIupdateTimer.AutoReset = true;
+            laserGUIupdateTimer.Enabled = true;
             }
             else
             {
@@ -587,12 +545,142 @@ namespace TC1K_LaserMonitor
 
 
 
+        public void setLaserButtonVisibilities(string laserType)
+        {
+            if (laserType == "MaiTai")
+            {
+                laserTypeLabel.Text = "Spectra-Physics MaiTai";
+                button_closeShutter_FixedWL.Visible = false;
+                button_openShutter_FixedWL.Visible = false;
+                shutterStatus_FixedWL.Visible = false;
+                fixedWavelengthLabel.Visible = false;
+                fixedLambdaLabel.Visible = false;
+                button_shutDownLaser.Visible = false;
+                pumpLaserHours.Visible = false;
+                pumpLaserHoursLabel.Visible = false;
+                button_align_FixedWL.Visible = false;
+                button_alignOFF_FixedWL.Visible = false;
+                alignFixedLabel.Visible = false;
+                alignFixedLambda.Visible = false;
+                button_align_TunableWL.Visible = false;
+                button_alignOFF_TunableWL.Visible = false;
+                alignTunableLabel.Visible = false;
+                alignTunableLambda.Visible = false;
+                button_chooseObjective.Visible = false;
+                button_populateObjectiveList.Visible = false;
+                dispersion_objectiveChoice.Visible = false;
+                label_dispersionCorrection.Visible = false;
+            }
+            else if (laserType == "InsightX3")
+            {
+                laserTypeLabel.Text = "Spectra-Physics InsightX3";
+                pumpLaser2Current.Visible = false;
+                pumpLaser2CurrentLabel.Visible = false;
+                pumpLaser2Temperature.Visible = false;
+                pumpLaser2TemperatureLabel.Visible = false;
+                button_align_FixedWL.Visible = false;
+                button_alignOFF_FixedWL.Visible = false;
+                alignFixedLabel.Visible = false;
+                alignFixedLambda.Visible = false;
+                check_controlGreenPower.Visible = false;
+                label_greenPowerNow.Visible = false;
+                greenPowerNow.Visible = false;
+                greenPowerToSet.Visible = false;
+                setGreenPower.Visible = false;
+            }
+            else if (laserType == "DiscoveryNX")
+            {
+                laserTypeLabel.Text = "Coherent Discovery NX";
+                modelockLabel.Visible = false;
+                modelockStatus.Visible = false;
+                warmupStatus.Visible = false;
+                warmupPctLabel.Visible = false;
+                button_shutDownLaser.Visible = false;
+                pumpLaserCurrent.Visible = false;
+                pumpLaserCurrentLabel.Visible = false;
+                pumpLaserTemperature.Visible = false;
+                pumpLaserTemperatureLabel.Visible = false;
+                pumpLaserHours.Visible = false;
+                pumpLaserHoursLabel.Visible = false;
+                pumpLaser2Current.Visible = false;
+                pumpLaser2CurrentLabel.Visible = false;
+                pumpLaser2Temperature.Visible = false;
+                pumpLaser2TemperatureLabel.Visible = false;
+                check_controlGreenPower.Visible = false;
+                label_greenPowerNow.Visible = false;
+                greenPowerNow.Visible = false;
+                greenPowerToSet.Visible = false;
+                setGreenPower.Visible = false;
+            }
+            else
+            {
+                Rep.Post("Invalid laser type " + laserType, repLevel.error, null);
+            }
+
+        }
+
+
+
+        private void timerTest_Click(object sender, EventArgs e)
+        {
+            int thisButtonActionID = DateTime.Now.Second;
+            Rep.Post("Button pressed... " + thisButtonActionID.ToString(), repLevel.details, null);
+
+
+            // wait for query to be available, or timeout
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            int timeout_ms = 5000;
+            while (true)
+            {
+                if (queryInProgress == false)
+                {
+                    queryInProgress = true;
+                    Rep.Post("Button action started... " + thisButtonActionID.ToString(), repLevel.details, null);
+                    break;
+                }
+                if (sw.ElapsedMilliseconds > timeout_ms)
+                {
+                    Rep.Post("Button action timed out!", repLevel.error, null);
+                    break;
+                }
+            }
 
 
 
 
 
+            int delay_ms = 2000;
+            System.Threading.Thread.Sleep(delay_ms);
+            Rep.Post("Button action done! " + thisButtonActionID.ToString(), repLevel.details, null);
+            queryInProgress = false;
 
+        }
+
+
+
+
+        bool queryInProgress = false;
+        public void testTimerUpdate(object sender, EventArgs e)
+        {
+            if (queryInProgress)
+            {
+                return;
+            }
+            queryInProgress = true;
+            int delay_ms = 2000;
+            System.Threading.Thread.Sleep(delay_ms);
+            queryInProgress = false;
+
+
+            this.Invoke(new MethodInvoker(delegate()
+            {
+                int timeSecs = DateTime.Now.Second;
+                string timerStr = "timer action. " + timeSecs.ToString();
+                timerTestLabel.Text = timerStr;
+                Rep.Post(timerStr, repLevel.details, null);
+            }));
+        }
 
 
 

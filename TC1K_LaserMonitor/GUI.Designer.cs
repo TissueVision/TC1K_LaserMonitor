@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.setGreenPower = new System.Windows.Forms.Button();
             this.greenPowerNow = new System.Windows.Forms.Label();
             this.greenPowerToSet = new System.Windows.Forms.TextBox();
@@ -102,6 +103,10 @@
             this.tunableWLshutterAndon = new System.Windows.Forms.Button();
             this.pmtOnOffIndicator = new System.Windows.Forms.Button();
             this.userMessages = new System.Windows.Forms.ListBox();
+            this.timerTest = new System.Windows.Forms.Button();
+            this.timerTestLabel = new System.Windows.Forms.Label();
+            this.optionSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.optionSettingsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // setGreenPower
@@ -145,6 +150,7 @@
             // 
             // wavelengthToSet
             // 
+            this.wavelengthToSet.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "wavelength", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.wavelengthToSet.Location = new System.Drawing.Point(279, 250);
             this.wavelengthToSet.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.wavelengthToSet.Name = "wavelengthToSet";
@@ -863,7 +869,6 @@
             // 
             // button_ConnectToLaser
             // 
-            this.button_ConnectToLaser.Enabled = false;
             this.button_ConnectToLaser.Location = new System.Drawing.Point(177, 70);
             this.button_ConnectToLaser.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_ConnectToLaser.Name = "button_ConnectToLaser";
@@ -966,11 +971,40 @@
             this.userMessages.Size = new System.Drawing.Size(469, 84);
             this.userMessages.TabIndex = 229;
             // 
+            // timerTest
+            // 
+            this.timerTest.Location = new System.Drawing.Point(974, 492);
+            this.timerTest.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.timerTest.Name = "timerTest";
+            this.timerTest.Size = new System.Drawing.Size(139, 33);
+            this.timerTest.TabIndex = 230;
+            this.timerTest.Text = "timer test";
+            this.timerTest.UseVisualStyleBackColor = true;
+            this.timerTest.Click += new System.EventHandler(this.timerTest_Click);
+            // 
+            // timerTestLabel
+            // 
+            this.timerTestLabel.AutoSize = true;
+            this.timerTestLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timerTestLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.timerTestLabel.Location = new System.Drawing.Point(970, 538);
+            this.timerTestLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.timerTestLabel.Name = "timerTestLabel";
+            this.timerTestLabel.Size = new System.Drawing.Size(19, 13);
+            this.timerTestLabel.TabIndex = 231;
+            this.timerTestLabel.Text = "....";
+            // 
+            // optionSettingsBindingSource
+            // 
+            this.optionSettingsBindingSource.DataSource = typeof(TC1K_LaserMonitor.optionSettings);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1270, 800);
+            this.Controls.Add(this.timerTestLabel);
+            this.Controls.Add(this.timerTest);
             this.Controls.Add(this.userMessages);
             this.Controls.Add(this.errorAndon);
             this.Controls.Add(this.button_clearError);
@@ -1050,6 +1084,7 @@
             this.Name = "GUI";
             this.Text = "Laser Control and Monitor";
             this.Load += new System.EventHandler(this.GUI_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.optionSettingsBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1131,6 +1166,9 @@
         public System.Windows.Forms.Button tunableWLshutterAndon;
         public System.Windows.Forms.Button pmtOnOffIndicator;
         private System.Windows.Forms.ListBox userMessages;
+        private System.Windows.Forms.BindingSource optionSettingsBindingSource;
+        private System.Windows.Forms.Button timerTest;
+        private System.Windows.Forms.Label timerTestLabel;
 
     }
 }

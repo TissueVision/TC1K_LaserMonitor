@@ -109,7 +109,6 @@ namespace TC1K_LaserMonitor
             laser.optionSettings = optionSettings;
             laser.fakeOut = optionSettings.fakeOutLaser;
             laser.comID = optionSettings.laserPort;
-            laser.minOKPower = optionSettings.laserMinOKPower_W;
             laser.enableWatchdog = optionSettings.enableLaserWatchdog;
             setLaserButtonVisibilities(optionSettings.laserType);
             System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
@@ -132,7 +131,7 @@ namespace TC1K_LaserMonitor
                 laserGUIupdateTimer.AutoReset = true;
                 laserGUIupdateTimer.Enabled = true;
                 queryInProgress = false;
-                collectBaseline_Click(null, null);
+                //collectBaseline_Click(null, null); // this kind of flips out if the power is close to 0.
             }
             else
             {
@@ -552,6 +551,7 @@ namespace TC1K_LaserMonitor
                     //Rep.Post("Obtained query lock...", repLevel.details, null);
                     return(true);
                 }
+                System.Windows.Forms.Application.DoEvents();
                 if (sw.ElapsedMilliseconds > timeout_ms)
                 {
                     Rep.Post("Query lock timed out!", repLevel.error, null);
@@ -611,7 +611,7 @@ namespace TC1K_LaserMonitor
                     queryInProgress = false;
                     return;
                 }
-                else if (queryTask == LaserReturnCode.OK) // this means that the values are valid, NOT that the laser is ready to use
+                else if ((queryTask == LaserReturnCode.OK)) // this means that the values are valid, NOT that the laser is ready to use
                 {
 
                     this.Invoke(new MethodInvoker(delegate()
@@ -724,7 +724,8 @@ namespace TC1K_LaserMonitor
                             bool powerOK = laser.checkLaserFluctuationsOK(laser.currentPower);
                             if (!powerOK)
                             {
-                                string powerString = String.Format("Laser power {0}W exceeds range of {1}-{2}x {3}W!");
+                                string powerString = String.Format("Laser power {0}W exceeds range of {1}-{2}x {3}W!", laser.currentPower,
+                                    optionSettings.laserPowerMinFrac, optionSettings.laserPowerMaxFrac, laser.baselineLaserPower);
                                 Rep.Post(powerString, repLevel.error, null);
                                 if (optionSettings.terminateOrchestratorOnDrift)
                                 {
@@ -799,6 +800,7 @@ namespace TC1K_LaserMonitor
             }
 
             queryInProgress = false;
+            updateMonitorAndon();
         }
         
 
@@ -851,6 +853,8 @@ namespace TC1K_LaserMonitor
 
         private void terminateOrchestratorOnDrift_CheckedChanged(object sender, EventArgs e)
         {
+            optionSettings.terminateOrchestratorOnDrift = terminateOrchestratorOnDrift.Checked;
+
             // the value of optionSettings.terminateOrchestratorOnDrift gets updated automatically, then this affects the andon
             updateMonitorAndon();
         }

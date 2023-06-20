@@ -217,7 +217,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(48, 525);
+            this.button6.Location = new System.Drawing.Point(48, 520);
             this.button6.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(267, 26);
@@ -411,7 +411,7 @@
             // 
             // button_disconnectPumpOn
             // 
-            this.button_disconnectPumpOn.Location = new System.Drawing.Point(48, 562);
+            this.button_disconnectPumpOn.Location = new System.Drawing.Point(48, 553);
             this.button_disconnectPumpOn.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_disconnectPumpOn.Name = "button_disconnectPumpOn";
             this.button_disconnectPumpOn.Size = new System.Drawing.Size(267, 26);
@@ -469,7 +469,7 @@
             // 
             // readyToCollect
             // 
-            this.readyToCollect.Location = new System.Drawing.Point(344, 478);
+            this.readyToCollect.Location = new System.Drawing.Point(344, 475);
             this.readyToCollect.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.readyToCollect.Name = "readyToCollect";
             this.readyToCollect.Size = new System.Drawing.Size(14, 14);
@@ -483,13 +483,13 @@
             this.label138.Location = new System.Drawing.Point(44, 474);
             this.label138.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label138.Name = "label138";
-            this.label138.Size = new System.Drawing.Size(141, 17);
+            this.label138.Size = new System.Drawing.Size(149, 17);
             this.label138.TabIndex = 110;
-            this.label138.Text = "Ready to collect data";
+            this.label138.Text = "Ready to open shutter";
             // 
             // button_shutDownLaser
             // 
-            this.button_shutDownLaser.Location = new System.Drawing.Point(48, 600);
+            this.button_shutDownLaser.Location = new System.Drawing.Point(48, 586);
             this.button_shutDownLaser.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.button_shutDownLaser.Name = "button_shutDownLaser";
             this.button_shutDownLaser.Size = new System.Drawing.Size(267, 26);
@@ -753,10 +753,10 @@
             this.errorAndon.BackColor = System.Drawing.Color.White;
             this.errorAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorAndon.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.errorAndon.Location = new System.Drawing.Point(48, 681);
+            this.errorAndon.Location = new System.Drawing.Point(48, 672);
             this.errorAndon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.errorAndon.Name = "errorAndon";
-            this.errorAndon.Size = new System.Drawing.Size(89, 53);
+            this.errorAndon.Size = new System.Drawing.Size(89, 66);
             this.errorAndon.TabIndex = 224;
             this.errorAndon.Text = "Error";
             this.errorAndon.UseVisualStyleBackColor = false;
@@ -764,7 +764,7 @@
             // button_clearError
             // 
             this.button_clearError.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_clearError.Location = new System.Drawing.Point(48, 650);
+            this.button_clearError.Location = new System.Drawing.Point(48, 644);
             this.button_clearError.Name = "button_clearError";
             this.button_clearError.Size = new System.Drawing.Size(89, 23);
             this.button_clearError.TabIndex = 225;
@@ -776,11 +776,11 @@
             // 
             this.laserStatusAndon.BackColor = System.Drawing.SystemColors.Control;
             this.laserStatusAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.laserStatusAndon.Location = new System.Drawing.Point(157, 682);
-            this.laserStatusAndon.MaximumSize = new System.Drawing.Size(89, 53);
+            this.laserStatusAndon.Location = new System.Drawing.Point(157, 673);
+            this.laserStatusAndon.MaximumSize = new System.Drawing.Size(89, 66);
             this.laserStatusAndon.MinimumSize = new System.Drawing.Size(89, 53);
             this.laserStatusAndon.Name = "laserStatusAndon";
-            this.laserStatusAndon.Size = new System.Drawing.Size(89, 53);
+            this.laserStatusAndon.Size = new System.Drawing.Size(89, 66);
             this.laserStatusAndon.TabIndex = 226;
             this.laserStatusAndon.Text = ".....";
             this.laserStatusAndon.UseVisualStyleBackColor = false;
@@ -790,11 +790,11 @@
             this.fixedWLshutterAndon.BackColor = System.Drawing.SystemColors.Control;
             this.fixedWLshutterAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fixedWLshutterAndon.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fixedWLshutterAndon.Location = new System.Drawing.Point(352, 682);
-            this.fixedWLshutterAndon.MaximumSize = new System.Drawing.Size(89, 53);
+            this.fixedWLshutterAndon.Location = new System.Drawing.Point(352, 673);
+            this.fixedWLshutterAndon.MaximumSize = new System.Drawing.Size(89, 66);
             this.fixedWLshutterAndon.MinimumSize = new System.Drawing.Size(89, 53);
             this.fixedWLshutterAndon.Name = "fixedWLshutterAndon";
-            this.fixedWLshutterAndon.Size = new System.Drawing.Size(89, 53);
+            this.fixedWLshutterAndon.Size = new System.Drawing.Size(89, 66);
             this.fixedWLshutterAndon.TabIndex = 227;
             this.fixedWLshutterAndon.Text = ".....";
             this.fixedWLshutterAndon.UseVisualStyleBackColor = false;
@@ -803,11 +803,11 @@
             // 
             this.tunableWLshutterAndon.BackColor = System.Drawing.SystemColors.Control;
             this.tunableWLshutterAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tunableWLshutterAndon.Location = new System.Drawing.Point(254, 682);
-            this.tunableWLshutterAndon.MaximumSize = new System.Drawing.Size(89, 53);
+            this.tunableWLshutterAndon.Location = new System.Drawing.Point(254, 673);
+            this.tunableWLshutterAndon.MaximumSize = new System.Drawing.Size(89, 66);
             this.tunableWLshutterAndon.MinimumSize = new System.Drawing.Size(89, 53);
             this.tunableWLshutterAndon.Name = "tunableWLshutterAndon";
-            this.tunableWLshutterAndon.Size = new System.Drawing.Size(89, 53);
+            this.tunableWLshutterAndon.Size = new System.Drawing.Size(89, 66);
             this.tunableWLshutterAndon.TabIndex = 228;
             this.tunableWLshutterAndon.Text = ".....";
             this.tunableWLshutterAndon.UseVisualStyleBackColor = false;
@@ -945,6 +945,7 @@
             // 
             this.terminateOrchestratorOnDrift.AutoSize = true;
             this.terminateOrchestratorOnDrift.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.optionSettingsBindingSource, "terminateOrchestratorOnDrift", true));
+            this.terminateOrchestratorOnDrift.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.optionSettingsBindingSource, "terminateOrchestratorOnDrift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.terminateOrchestratorOnDrift.Location = new System.Drawing.Point(528, 28);
             this.terminateOrchestratorOnDrift.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.terminateOrchestratorOnDrift.Name = "terminateOrchestratorOnDrift";
@@ -979,11 +980,11 @@
             this.monitorOKAndon.BackColor = System.Drawing.SystemColors.Control;
             this.monitorOKAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.monitorOKAndon.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.monitorOKAndon.Location = new System.Drawing.Point(449, 682);
-            this.monitorOKAndon.MaximumSize = new System.Drawing.Size(89, 53);
+            this.monitorOKAndon.Location = new System.Drawing.Point(449, 673);
+            this.monitorOKAndon.MaximumSize = new System.Drawing.Size(89, 66);
             this.monitorOKAndon.MinimumSize = new System.Drawing.Size(89, 53);
             this.monitorOKAndon.Name = "monitorOKAndon";
-            this.monitorOKAndon.Size = new System.Drawing.Size(89, 53);
+            this.monitorOKAndon.Size = new System.Drawing.Size(89, 66);
             this.monitorOKAndon.TabIndex = 244;
             this.monitorOKAndon.Text = ".....";
             this.monitorOKAndon.UseVisualStyleBackColor = false;

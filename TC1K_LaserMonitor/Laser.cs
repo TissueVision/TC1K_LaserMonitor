@@ -89,7 +89,6 @@ namespace TC1K_LaserMonitor
         public int laserStabilizationTime_s = 3;
         public bool enableWatchdog = true;
         public int watchdogTimeout_s = 5; // if the laser does not not see serial-port activity for this time, it turns off for safety
-        public double minOKPower = 0; // not used by all lasers
         public string newLineChar = null; // the character(s) that indicate the end of a line read from the serial port
         public string serialNum = "SN not implemented";
         public double relativeHumidity = -1; // this is not implemented yet!
@@ -202,24 +201,24 @@ namespace TC1K_LaserMonitor
                 readyNow = false;
                 currentQueryErrorMessages.Add("Pump laser is not on!");
             }
-            if (!manyScanMode) // in multiple wavelength scan mode, it will set these as needed
-            {
-                if (tunableShutterNeededForLaserOK && !tunableShutterIsOpen)
-                {
-                    readyNow = false;
-                    currentQueryErrorMessages.Add("Tunable-wavelength shutter is not open!");
-                }
-                if (fixedShutterNeededForLaserOK && !fixedShutterIsOpen)
-                {
-                    readyNow = false;
-                    currentQueryErrorMessages.Add("Fixed-wavelength shutter is not open!");
-                }
-                if (!tunableShutterIsOpen && !fixedShutterIsOpen)
-                {
-                    readyNow = false;
-                    currentQueryErrorMessages.Add("No shutter is open!");
-                }
-            }
+            //if (!manyScanMode) // in multiple wavelength scan mode, it will set these as needed
+            //{
+            //    if (tunableShutterNeededForLaserOK && !tunableShutterIsOpen)
+            //    {
+            //        readyNow = false;
+            //        currentQueryErrorMessages.Add("Tunable-wavelength shutter is not open!");
+            //    }
+            //    if (fixedShutterNeededForLaserOK && !fixedShutterIsOpen)
+            //    {
+            //        readyNow = false;
+            //        currentQueryErrorMessages.Add("Fixed-wavelength shutter is not open!");
+            //    }
+            //    if (!tunableShutterIsOpen && !fixedShutterIsOpen)
+            //    {
+            //        readyNow = false;
+            //        currentQueryErrorMessages.Add("No shutter is open!");
+            //    }
+            //}
             if (laserError)
             {
                 readyNow = false;
@@ -227,10 +226,10 @@ namespace TC1K_LaserMonitor
             }
             if (minOKPowerConfigured)
             {
-                if (currentPower < minOKPower)
+                if (currentPower < optionSettings.laserMinOKPower_W)
                 {
                     readyNow = false;
-                    string powerMsg = String.Format("Laser power is {0}W, below minimum power {1}W!", currentPower, minOKPower);
+                    string powerMsg = String.Format("Laser power is {0}W, below minimum power {1}W!", currentPower, optionSettings.laserMinOKPower_W);
                     currentQueryErrorMessages.Add(powerMsg);
                 }
             }
@@ -261,7 +260,7 @@ namespace TC1K_LaserMonitor
                 }
                 else
                 {
-                    stable = (currentPower >= minOKPower);
+                    stable = (currentPower >= optionSettings.laserMinOKPower_W);
                 }            
             }
 
@@ -515,6 +514,12 @@ namespace TC1K_LaserMonitor
  
         public LaserReturnCode collectBaselinePower() 
         {
+            if (!stable)
+            {
+                Rep.Post("Laser is not yet ready to collect baseline power!", repLevel.error, null);
+                return (LaserReturnCode.MiscError);
+            }
+
             string baselineString = String.Format("Collecting baseline laser power...", baselineLaserPower);
             Rep.Post(baselineString, repLevel.details, null);
 

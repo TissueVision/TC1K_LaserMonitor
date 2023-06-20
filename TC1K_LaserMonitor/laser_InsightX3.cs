@@ -172,30 +172,30 @@ namespace TC1K_LaserMonitor
                     // check shutters
                     tunableShutterIsOpen = (responseAsByteString.Substring(respLen - 1 - 2, 1) == "1");
                     fixedShutterIsOpen = (responseAsByteString.Substring(respLen - 1 - 3, 1) == "1");
-                    if (fixedShutterNeededForLaserOK)
-                    {
-                        if (fixedShutterConfigured && fixedShutterIsOpen)
-                        {
-                            nConsecutiveShutterErrors = 0;
-                        }
-                        else
-                        {
-                            nShutterErrors++;
-                            nConsecutiveShutterErrors++;
-                        }
-                    }
-                    if (tunableShutterNeededForLaserOK)
-                    {
-                        if (tunableShutterIsOpen)
-                        {
-                            nConsecutiveShutterErrors = 0;
-                        }
-                        else
-                        {
-                            nShutterErrors++;
-                            nConsecutiveShutterErrors++;
-                        }
-                    }
+                    //if (fixedShutterNeededForLaserOK)
+                    //{
+                    //    if (fixedShutterConfigured && fixedShutterIsOpen)
+                    //    {
+                    //        nConsecutiveShutterErrors = 0;
+                    //    }
+                    //    else
+                    //    {
+                    //        nShutterErrors++;
+                    //        nConsecutiveShutterErrors++;
+                    //    }
+                    //}
+                    //if (tunableShutterNeededForLaserOK)
+                    //{
+                    //    if (tunableShutterIsOpen)
+                    //    {
+                    //        nConsecutiveShutterErrors = 0;
+                    //    }
+                    //    else
+                    //    {
+                    //        nShutterErrors++;
+                    //        nConsecutiveShutterErrors++;
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)

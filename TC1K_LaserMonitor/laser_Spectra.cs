@@ -60,7 +60,7 @@ namespace TC1K_LaserMonitor
 
             // MaiTai needs to have a warmup command sent
             Thread.Sleep(500); // added for TC1K laser monitor
-            if (typeof(laser_MaiTai).IsInstanceOfType(this))
+            if (typeof(laser_Spectra).IsInstanceOfType(this))
             {
                 queryResponse = sendQuery(false,"READ:PCTWARMEDUP?"); // see how warmed up it is
                 trimmedResponse = queryResponse.Replace("%", "0");

@@ -20,7 +20,6 @@ namespace TC1K_LaserMonitor
 
         // timer
         public System.Timers.Timer laserGUIupdateTimer = new System.Timers.Timer(); // triggers updating the laser
-        public double laserGUIUpdateInterval_ms = 1000;
         bool blinkerState = false;
 
         // misc
@@ -122,11 +121,11 @@ namespace TC1K_LaserMonitor
             if (getQueryLock() == false) { return; }
 
             laser.closeAll();
-            System.Threading.Thread.Sleep((int)laserGUIUpdateInterval_ms);
+            System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
             if (laser.initialize() == TaskEnd.OK)
             {
                 // create a timer
-                laserGUIupdateTimer = new System.Timers.Timer(laserGUIUpdateInterval_ms);
+                laserGUIupdateTimer = new System.Timers.Timer((double)optionSettings.laserGUIUpdateInterval_ms);
                 laserGUIupdateTimer.Elapsed += updateLaserStatus; // Hook up the Elapsed event for the timer.
                 laserGUIupdateTimer.AutoReset = true;
                 laserGUIupdateTimer.Enabled = true;
@@ -558,6 +557,8 @@ namespace TC1K_LaserMonitor
                     return (false);
                 }
             }
+            System.Windows.Forms.Application.DoEvents();
+            System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
         }
         
 
@@ -766,8 +767,9 @@ namespace TC1K_LaserMonitor
             catch (Exception ex)
             {
             }
-
+            System.Windows.Forms.Application.DoEvents();
             queryInProgress = false;
+            System.Windows.Forms.Application.DoEvents();
         }
 
 

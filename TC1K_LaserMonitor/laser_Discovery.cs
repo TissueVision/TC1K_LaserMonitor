@@ -171,12 +171,6 @@ namespace TC1K_LaserMonitor
                 return (LaserReturnCode.OK);
             }
 
-            Lockout.LockoutReturn lockOK = lockout.requestLock(calledByUpdateGUI);
-            if (lockOK != Lockout.LockoutReturn.OK)
-            {
-                return (lockout.lockoutToLaserCode(lockOK));
-            }
-
             string queryResponse;
             bool allResponsesOK = true;
             string trimmedResponse = "";
@@ -308,7 +302,6 @@ namespace TC1K_LaserMonitor
                 //    Rep.Post(queryErrorMsg, repLevel.details, null);
                 //}));
             }
-            lockout.releaseLock();
             if (allResponsesOK)
             {
                 lastQueryOK = true;
@@ -349,13 +342,6 @@ namespace TC1K_LaserMonitor
             }
 
             wavelengthIsCurrentlyChanging = true;
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                wavelengthIsCurrentlyChanging = false;
-                Rep.Post("Lock timeout while tuning laser!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
-            }
             gui.laserStabilityAndon.set("Laser is stabilizing", gui.andonSemiOKColor, gui.andonTextDarkColor);
             commandString = "WV=" + wavelengthToSet.ToString();
             LaserReturnCode commandOK = sendCommand(commandString);
@@ -377,7 +363,6 @@ namespace TC1K_LaserMonitor
                 }
             }
 
-            lockout.releaseLock();
             if (commandOK==LaserReturnCode.OK)
             {
                 wavelengthIsCurrentlyChanging = false;
@@ -410,12 +395,6 @@ namespace TC1K_LaserMonitor
                 Rep.Post("Shutter set.", repLevel.details, null);
                 return (LaserReturnCode.OK);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                Rep.Post("Lock timeout while setting shutter!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
-            }
             string shutterTypeString = "";
             string onOffString = "";
             if (shutterType == ShutterType.TunableWavelength)
@@ -438,7 +417,6 @@ namespace TC1K_LaserMonitor
                 onOffString = "1";
                 if (!pumpLaserIsOn)
                 {
-                    lockout.releaseLock();
                     Rep.Post("Pump laser is not on! Can not open shutter.", repLevel.error, null);
                     return LaserReturnCode.PumpNotOn;
                 }
@@ -450,7 +428,6 @@ namespace TC1K_LaserMonitor
             commandString = shutterTypeString + onOffString;
             LaserReturnCode commandOK = sendCommand(commandString);
             System.Threading.Thread.Sleep(1000);
-            lockout.releaseLock();
             if (commandOK == LaserReturnCode.OK)
             {
                 Rep.Post("Shutter is set!", repLevel.details, null);
@@ -479,12 +456,6 @@ namespace TC1K_LaserMonitor
                 Rep.Post("Pump set.", repLevel.details, null);
                 return (LaserReturnCode.OK);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                Rep.Post("Lock timeout while setting pump!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
-            }
 
             if (onOrOff)
             {
@@ -495,7 +466,6 @@ namespace TC1K_LaserMonitor
                 commandString = "LASER=0";
             }
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
             if (commandOK == LaserReturnCode.OK)
             {
                 Rep.Post("Pump is set!", repLevel.details, null);
@@ -544,11 +514,6 @@ namespace TC1K_LaserMonitor
             {
                 return (LaserReturnCode.CommError);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.MiscError);
-            }
             string whichOutput = null;
             string whichMode = null;
             if (shutter==ShutterType.FixedWavelength)
@@ -569,7 +534,6 @@ namespace TC1K_LaserMonitor
             }
             commandString = whichOutput + "=" + whichMode;
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
             return (commandOK);
         }
 
@@ -582,14 +546,8 @@ namespace TC1K_LaserMonitor
             {
                 return (LaserReturnCode.CommError);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.CommTimeout);
-            }
             commandString = "GDDCURVEN=" + objectiveName;
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
             return (commandOK); // default in case override does not work.
         }
 
@@ -600,11 +558,6 @@ namespace TC1K_LaserMonitor
             if (!commsOK)
             {
                 return (LaserReturnCode.CommError);
-            }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.CommTimeout);
             }
             objectiveList = new List<string>();
             string queryResponse = null;
@@ -625,7 +578,6 @@ namespace TC1K_LaserMonitor
                     objectiveList.Add(queryResponse);
                 }
             }
-            lockout.releaseLock();
             return (LaserReturnCode.OK); // default in case override does not work.
         }
 

@@ -36,7 +36,6 @@ namespace TC1K_LaserMonitor
         public string comID;
         public GUI gui;
         public SerialPort _serialPort;
-        public Lockout lockout;
         public Int32 baudRate;
         public bool initializing = false;
         public bool pumpLaserIsOn = false;
@@ -115,9 +114,6 @@ namespace TC1K_LaserMonitor
             commsOK = false;
             laserError = false;
             resetErrorCounts();
-            lockout = new Lockout();
-            lockout.name = "Laser";
-            lockout.Rep = Rep;
             if (fakeOut)
             {
                 commsOK = true;
@@ -171,7 +167,6 @@ namespace TC1K_LaserMonitor
             commsOK = true;
             initializing = false;
             Rep.Post("Laser communication is initialized.", repLevel.details, null);
-            lockout.releaseLock();
             LaserReturnCode laserTask = turnPumpOnOff(true);
             //if (laserTask != LaserReturnCode.OK)
             //{

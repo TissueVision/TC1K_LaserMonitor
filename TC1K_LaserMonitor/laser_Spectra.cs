@@ -162,7 +162,6 @@ namespace TC1K_LaserMonitor
         // 
         public override LaserReturnCode setWavelength(Double wavelengthToSet)
         {
-            //System.Threading.Thread.Sleep(500); // I'm not sure why this is needed but otherwise it sometimes hangs
             if (!commsOK)
             {
                 Rep.Post("Laser is not connected, can not set wavelength!", repLevel.error, null);
@@ -185,21 +184,17 @@ namespace TC1K_LaserMonitor
             }
 
             wavelengthIsCurrentlyChanging = true;
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                wavelengthIsCurrentlyChanging = false;
-                Rep.Post("Lock timeout while tuning laser!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
-            }
             commandString = "WAV " + wavelengthToSet.ToString();
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
+
+            // I'm not sure why this is needed but I'm trying to keep it from hanging
+            System.Windows.Forms.Application.DoEvents();
+            System.Threading.Thread.Sleep(1000); 
+            System.Windows.Forms.Application.DoEvents();
 
             // wait for confirmation 
             System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
-            LaserReturnCode thisExit = LaserReturnCode.MiscError;
             //bool setWavelengthComplete = false;
             //while (!setWavelengthComplete)
             //{
@@ -242,7 +237,7 @@ namespace TC1K_LaserMonitor
             //}
             queryStatus(false);
             checkLaserReady();
-            return (thisExit);
+            return (LaserReturnCode.OK);
         }
 
 
@@ -258,12 +253,6 @@ namespace TC1K_LaserMonitor
             {
                 Rep.Post("Shutter set.", repLevel.details, null);
                 return (LaserReturnCode.OK);
-            }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                Rep.Post("Lock timeout while setting shutter!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
             }
             string shutterTypeString = "";
             string onOffString = "";
@@ -287,7 +276,6 @@ namespace TC1K_LaserMonitor
                 onOffString = "1";
                 if (!pumpLaserIsOn)
                 {
-                    lockout.releaseLock();
                     Rep.Post("Pump laser is not on! Can not open shutter.", repLevel.error, null);
                     return LaserReturnCode.PumpNotOn;
                 }
@@ -299,7 +287,6 @@ namespace TC1K_LaserMonitor
             commandString = shutterTypeString + " " + onOffString;
             LaserReturnCode commandOK = sendCommand(commandString);
             System.Threading.Thread.Sleep(1000);
-            lockout.releaseLock();
             if (commandOK == LaserReturnCode.OK)
             {
                 Rep.Post("Shutter is set!", repLevel.details, null);
@@ -327,12 +314,6 @@ namespace TC1K_LaserMonitor
                 Rep.Post("Pump set.", repLevel.details, null);
                 return (LaserReturnCode.OK);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                Rep.Post("Lock timeout while setting pump!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
-            }
 
             string commandString;
             if (onOrOff)
@@ -340,7 +321,6 @@ namespace TC1K_LaserMonitor
                 if (warmupFraction != 100)
                 {
                     Rep.Post("Pump laser can not be turned on until system is 100% warmed up!", repLevel.error, null);
-                    lockout.releaseLock();
                     return (LaserReturnCode.NotWarmedUp);
                 }
                 commandString = "ON";
@@ -350,7 +330,6 @@ namespace TC1K_LaserMonitor
                 commandString = "OFF";
             }
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
             if (commandOK == LaserReturnCode.OK)
             {
                 Rep.Post("Pump is set!", repLevel.details, null);
@@ -403,11 +382,6 @@ namespace TC1K_LaserMonitor
             {
                 return (LaserReturnCode.CommError);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.CommTimeout);
-            }
             commandString = "OBJECTIVE:SELECT " + objectiveName;
             LaserReturnCode commandOK = sendCommand(commandString);
             if (commandOK != LaserReturnCode.OK)
@@ -415,7 +389,6 @@ namespace TC1K_LaserMonitor
                 Rep.Post("Error while selecting objective!", repLevel.error, null);
                 return (commandOK);
             }
-            lockout.releaseLock();
             return (LaserReturnCode.OK);
         }
 
@@ -426,11 +399,6 @@ namespace TC1K_LaserMonitor
             if (!commsOK)
             {
                 return (LaserReturnCode.CommError);
-            }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.CommTimeout);
             }
             string queryResponse = sendQuery(true,"OBJECTIVE:LIST?");
             if (queryResponse == "error")
@@ -453,7 +421,6 @@ namespace TC1K_LaserMonitor
                     objectiveList.Add(thisObjective);
                 }
             }
-            lockout.releaseLock();
             return (LaserReturnCode.OK); // default in case override does not work.
         }
 

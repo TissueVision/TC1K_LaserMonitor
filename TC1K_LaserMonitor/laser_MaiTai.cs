@@ -62,12 +62,6 @@ namespace TC1K_LaserMonitor
                 return (LaserReturnCode.OK);
             }
 
-            Lockout.LockoutReturn lockOK = lockout.requestLock(calledByUpdateGUI);
-            if (lockOK != Lockout.LockoutReturn.OK)
-            {
-                return (lockout.lockoutToLaserCode(lockOK));
-            }
-
             string queryResponse;
             bool allResponsesOK = true;
             string trimmedResponse = "";
@@ -270,7 +264,6 @@ namespace TC1K_LaserMonitor
                     Rep.Post(queryErrorMsg, repLevel.details, null);
                 }));
             }
-            lockout.releaseLock();
             if (allResponsesOK)
             {
                 lastQueryOK = true;
@@ -299,11 +292,6 @@ namespace TC1K_LaserMonitor
             {
                 return (LaserReturnCode.CommError);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.CommTimeout);
-            }
             LaserReturnCode commandOK;
             if (onOff)
             {
@@ -317,7 +305,6 @@ namespace TC1K_LaserMonitor
             {
                 commandOK = sendCommand("MODE POW"); // control output power
             }
-            lockout.releaseLock();
             return (commandOK);
         }
 

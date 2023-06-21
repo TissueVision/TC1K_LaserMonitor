@@ -34,17 +34,10 @@ namespace TC1K_LaserMonitor
                 Rep.Post(shutdownOKMsg, repLevel.details, null);
                 return (LaserReturnCode.OK);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                Rep.Post("Lock timeout while starting soft shutdown!", repLevel.error, null);
-                return (LaserReturnCode.CommTimeout);
-            }
 
             Rep.Post("Laser is beginning soft shutdown.  Please wait...", repLevel.error, null);
             string commandString = "SHUTDOWN";
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
             if (commandOK == LaserReturnCode.OK)
             {
                 _serialPort.Close();
@@ -68,11 +61,6 @@ namespace TC1K_LaserMonitor
             if (!commsOK)
             {
                 return (LaserReturnCode.CommError);
-            }
-            Lockout.LockoutReturn lockOK =  lockout.requestLock(calledByUpdateGUI);
-            if (lockOK != Lockout.LockoutReturn.OK)
-            {
-                return (lockout.lockoutToLaserCode(lockOK));
             }
 
             string queryResponse;
@@ -220,7 +208,6 @@ namespace TC1K_LaserMonitor
                     Rep.Post(queryErrorMsg, repLevel.details, null);
                 }));
             }
-            lockout.releaseLock();
             if (allResponsesOK)
             {
                 lastQueryOK = true;
@@ -242,11 +229,6 @@ namespace TC1K_LaserMonitor
             {
                 return (LaserReturnCode.CommError);
             }
-            var lockTask = lockout.requestLock(false);
-            if (lockTask != Lockout.LockoutReturn.OK)
-            {
-                return (LaserReturnCode.MiscError);
-            }
             string commandString = null;
             if (onOff)
             {
@@ -257,7 +239,6 @@ namespace TC1K_LaserMonitor
                 commandString = "MODE RUN";
             }
             LaserReturnCode commandOK = sendCommand(commandString);
-            lockout.releaseLock();
             return (commandOK);
         }
 

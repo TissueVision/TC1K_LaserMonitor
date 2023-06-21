@@ -80,7 +80,6 @@
     <Compile Include="laser_InsightX3.cs" />
     <Compile Include="laser_MaiTai.cs" />
     <Compile Include="laser_Spectra.cs" />
-    <Compile Include="Lockout.cs" />
     <Compile Include="optionSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

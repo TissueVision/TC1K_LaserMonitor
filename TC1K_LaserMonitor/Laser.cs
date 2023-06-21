@@ -173,10 +173,10 @@ namespace TC1K_LaserMonitor
             Rep.Post("Laser communication is initialized.", repLevel.details, null);
             lockout.releaseLock();
             LaserReturnCode laserTask = turnPumpOnOff(true);
-            if (laserTask != LaserReturnCode.OK)
-            {
-                return (TaskEnd.GeneralError);
-            }
+            //if (laserTask != LaserReturnCode.OK)
+            //{
+            //    return (TaskEnd.GeneralError);
+            //}
             return (TaskEnd.OK);
         }
 
@@ -247,22 +247,23 @@ namespace TC1K_LaserMonitor
                 currentQueryErrorMessages.Add("Wavelength is currently changing!");
             }
 
-            // check stability
-            if (wavelengthIsCurrentlyChanging)
-            {
-                stable = false;
-            }
-            else
-            { 
-                if (modelockConfigured)
-                {
-                    stable = modelocked;
-                }
-                else
-                {
-                    stable = (currentPower >= optionSettings.laserMinOKPower_W);
-                }            
-            }
+            //// check stability
+            //if (wavelengthIsCurrentlyChanging)
+            //{
+            //    stable = false;
+            //}
+            //else
+            //{ 
+            //    if (modelockConfigured)
+            //    {
+            //        stable = modelocked;
+            //    }
+            //    else
+            //    {
+            //        stable = (currentPower >= optionSettings.laserMinOKPower_W);
+            //    }            
+            //}
+            stable = true; // it's always stable cause I'm taking out this feature
 
             // update state and indicator, if there has been a change
             if (ready && !readyNow)

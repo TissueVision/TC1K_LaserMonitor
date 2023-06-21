@@ -104,8 +104,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.collectBaseline = new System.Windows.Forms.Button();
             this.terminateOrchestratorOnDrift = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.minOKPower_W = new System.Windows.Forms.TextBox();
             this.monitorOKAndon = new System.Windows.Forms.Button();
             this.optionSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.optionSettingsBindingSource)).BeginInit();
@@ -784,6 +782,7 @@
             this.laserStatusAndon.TabIndex = 226;
             this.laserStatusAndon.Text = ".....";
             this.laserStatusAndon.UseVisualStyleBackColor = false;
+            this.laserStatusAndon.Visible = false;
             // 
             // fixedWLshutterAndon
             // 
@@ -955,26 +954,6 @@
             this.terminateOrchestratorOnDrift.UseVisualStyleBackColor = true;
             this.terminateOrchestratorOnDrift.CheckedChanged += new System.EventHandler(this.terminateOrchestratorOnDrift_CheckedChanged);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label5.Location = new System.Drawing.Point(525, 292);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(123, 17);
-            this.label5.TabIndex = 242;
-            this.label5.Text = "Min OK power (W)";
-            // 
-            // minOKPower_W
-            // 
-            this.minOKPower_W.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "laserMinOKPower_W", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.minOKPower_W.Location = new System.Drawing.Point(743, 289);
-            this.minOKPower_W.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            this.minOKPower_W.Name = "minOKPower_W";
-            this.minOKPower_W.Size = new System.Drawing.Size(65, 23);
-            this.minOKPower_W.TabIndex = 243;
-            // 
             // monitorOKAndon
             // 
             this.monitorOKAndon.BackColor = System.Drawing.SystemColors.Control;
@@ -999,8 +978,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1370, 752);
             this.Controls.Add(this.monitorOKAndon);
-            this.Controls.Add(this.minOKPower_W);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.terminateOrchestratorOnDrift);
             this.Controls.Add(this.collectBaseline);
             this.Controls.Add(this.T_sample_s);
@@ -1164,8 +1141,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button collectBaseline;
         private System.Windows.Forms.CheckBox terminateOrchestratorOnDrift;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox minOKPower_W;
         public System.Windows.Forms.Button monitorOKAndon;
 
     }

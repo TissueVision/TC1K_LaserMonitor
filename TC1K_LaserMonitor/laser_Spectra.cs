@@ -67,8 +67,8 @@ namespace TC1K_LaserMonitor
                 warmupFraction = Convert.ToDouble(trimmedResponse); // added for TC1K laser monitor
                 if (queryResponse == "error")
                 {
-                    Rep.Post("Could not start warmup; initialization failed!", repLevel.error, null);
-                    return (LaserReturnCode.CommError);
+                    Rep.Post("Error reading warmup fraction! Initialization failed!", repLevel.error, null);
+                    return (LaserReturnCode.MiscError);
                 }
                 else if (Convert.ToDouble(trimmedResponse) == 0) // it has to be zero
                 {
@@ -162,6 +162,7 @@ namespace TC1K_LaserMonitor
         // 
         public override LaserReturnCode setWavelength(Double wavelengthToSet)
         {
+            //System.Threading.Thread.Sleep(500); // I'm not sure why this is needed but otherwise it sometimes hangs
             if (!commsOK)
             {
                 Rep.Post("Laser is not connected, can not set wavelength!", repLevel.error, null);
@@ -199,46 +200,46 @@ namespace TC1K_LaserMonitor
             System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
             LaserReturnCode thisExit = LaserReturnCode.MiscError;
-            bool setWavelengthComplete = false;
-            while (!setWavelengthComplete)
-            {
-                System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
+            //bool setWavelengthComplete = false;
+            //while (!setWavelengthComplete)
+            //{
+            //    System.Threading.Thread.Sleep(optionSettings.laserGUIUpdateInterval_ms);
 
-                // get the current wavelength
-                lockTask = lockout.requestLock(false);
-                if (lockTask != Lockout.LockoutReturn.OK)
-                {
-                    continue;
-                }
-                string wavelengthNowResponse = sendQuery(false, "READ:WAVELENGTH?");
-                lockout.releaseLock();
+            //    // get the current wavelength
+            //    lockTask = lockout.requestLock(false);
+            //    if (lockTask != Lockout.LockoutReturn.OK)
+            //    {
+            //        continue;
+            //    }
+            //    string wavelengthNowResponse = sendQuery(false, "READ:WAVELENGTH?");
+            //    lockout.releaseLock();
 
-                // compare with target wavelength
-                double wavelengthNow = 0;
-                if (wavelengthNowResponse != "error")
-                {
-                    if (wavelengthNowReportedWithNM)
-                    {
-                        wavelengthNowResponse = wavelengthNowResponse.Substring(0, wavelengthNowResponse.Length - 2); // clip off 'nm' from the end 
-                    }
-                    wavelengthNow = Convert.ToDouble(wavelengthNowResponse);
-                }
-                if (wavelengthNow == wavelengthToSet)
-                {
-                    wavelengthIsCurrentlyChanging = false;
-                    waitForLaserReady(); // this lets power / modelock stabilize
-                    thisExit = LaserReturnCode.OK;
-                    setWavelengthComplete = true;
-                    Rep.Post(tuningCompleteMsg, repLevel.details, null);
-                }
-                else if (stopWatch.ElapsedMilliseconds > setWavelengthTimeout_s * 1000)
-                {
-                    wavelengthIsCurrentlyChanging = false;
-                    thisExit = LaserReturnCode.MiscError;
-                    setWavelengthComplete = true;
-                    Rep.Post("Laser timed out while setting wavelength!", repLevel.details, null);
-                }
-            }
+            //    // compare with target wavelength
+            //    double wavelengthNow = 0;
+            //    if (wavelengthNowResponse != "error")
+            //    {
+            //        if (wavelengthNowReportedWithNM)
+            //        {
+            //            wavelengthNowResponse = wavelengthNowResponse.Substring(0, wavelengthNowResponse.Length - 2); // clip off 'nm' from the end 
+            //        }
+            //        wavelengthNow = Convert.ToDouble(wavelengthNowResponse);
+            //    }
+            //    if (wavelengthNow == wavelengthToSet)
+            //    {
+            //        wavelengthIsCurrentlyChanging = false;
+            //        waitForLaserReady(); // this lets power / modelock stabilize
+            //        thisExit = LaserReturnCode.OK;
+            //        setWavelengthComplete = true;
+            //        Rep.Post(tuningCompleteMsg, repLevel.details, null);
+            //    }
+            //    else if (stopWatch.ElapsedMilliseconds > setWavelengthTimeout_s * 1000)
+            //    {
+            //        wavelengthIsCurrentlyChanging = false;
+            //        thisExit = LaserReturnCode.MiscError;
+            //        setWavelengthComplete = true;
+            //        Rep.Post("Laser timed out while setting wavelength!", repLevel.details, null);
+            //    }
+            //}
             queryStatus(false);
             checkLaserReady();
             return (thisExit);
@@ -339,6 +340,7 @@ namespace TC1K_LaserMonitor
                 if (warmupFraction != 100)
                 {
                     Rep.Post("Pump laser can not be turned on until system is 100% warmed up!", repLevel.error, null);
+                    lockout.releaseLock();
                     return (LaserReturnCode.NotWarmedUp);
                 }
                 commandString = "ON";

@@ -75,12 +75,7 @@ namespace TC1K_LaserMonitor
         public bool wavelengthIsCurrentlyChanging = false;
 
         // intermittent errors
-        public int nQueryErrors = 0;
-        public int nConsecutiveQueryErrors = 0;
-        public int nShutterErrors = 0;
-        public int nConsecutiveShutterErrors = 0;
         public int nModelockErrors = 0;
-        public int nConsecutiveModelockErrors = 0;
 
         // misc params
         public int serialTimeout_ms = 500;
@@ -219,15 +214,6 @@ namespace TC1K_LaserMonitor
                 readyNow = false;
                 currentQueryErrorMessages.Add("Laser replied with error code " + errorCode);
             }
-            if (minOKPowerConfigured)
-            {
-                if (currentPower < optionSettings.laserMinOKPower_W)
-                {
-                    readyNow = false;
-                    string powerMsg = String.Format("Laser power is {0}W, below minimum power {1}W!", currentPower, optionSettings.laserMinOKPower_W);
-                    currentQueryErrorMessages.Add(powerMsg);
-                }
-            }
             if (modelockConfigured)
             {
                 if (!modelocked)
@@ -291,41 +277,11 @@ namespace TC1K_LaserMonitor
                 Rep.Post(errorMsg, repLevel.error, null);
                 tooManyErrors = true;
             }
-            if (nQueryErrors > optionSettings.maxQueryErrors)
-            {
-                errorMsg = String.Format("{0} query errors! exceeds limit of {1}", nQueryErrors, optionSettings.maxQueryErrors);
-                Rep.Post(errorMsg, repLevel.error, null);
-                tooManyErrors = true;
-            }
-            if (nConsecutiveQueryErrors > optionSettings.maxConsecutiveQueryErrors)
-            {
-                errorMsg = String.Format("{0} consecutive query errors! exceeds limit of {1}", nConsecutiveQueryErrors, optionSettings.maxConsecutiveQueryErrors);
-                Rep.Post(errorMsg, repLevel.error, null);
-                tooManyErrors = true;
-            }
-            if (nShutterErrors > optionSettings.maxShutterErrors)
-            {
-                errorMsg = String.Format("{0} shutter errors! exceeds limit of {1}", nShutterErrors, optionSettings.maxShutterErrors);
-                Rep.Post(errorMsg, repLevel.error, null);
-                tooManyErrors = true;
-            }
-            if (nConsecutiveShutterErrors > optionSettings.maxConsecutiveShutterErrors)
-            {
-                errorMsg = String.Format("{0} consecutive shutter errors! exceeds limit of {1}", nConsecutiveShutterErrors, optionSettings.maxConsecutiveShutterErrors);
-                Rep.Post(errorMsg, repLevel.error, null);
-                tooManyErrors = true;
-            }
             if (modelockConfigured)
             {
                 if (nModelockErrors > optionSettings.maxModelockErrors)
                 {
                     errorMsg = String.Format("{0} modelock errors! exceeds limit of {1}", nModelockErrors, optionSettings.maxModelockErrors);
-                    Rep.Post(errorMsg, repLevel.error, null);
-                    tooManyErrors = true;
-                }
-                if (nConsecutiveModelockErrors > optionSettings.maxConsecutiveModelockErrors)
-                {
-                    errorMsg = String.Format("{0} consecutive modelock errors! exceeds limit of {1}", nConsecutiveModelockErrors, optionSettings.maxConsecutiveModelockErrors);
                     Rep.Post(errorMsg, repLevel.error, null);
                     tooManyErrors = true;
                 }
@@ -338,12 +294,7 @@ namespace TC1K_LaserMonitor
         // 
         public void resetErrorCounts()
         {
-            nQueryErrors = 0;
-            nConsecutiveQueryErrors = 0;
-            nShutterErrors = 0;
-            nConsecutiveShutterErrors = 0;
             nModelockErrors = 0;
-            nConsecutiveModelockErrors = 0;
         }
 
 
@@ -538,8 +489,11 @@ namespace TC1K_LaserMonitor
                 } 
                 if (querySucceeded) 
                 { 
-                    powerRunningTotal = powerRunningTotal + currentPower; 
-                    nPowerPoints = nPowerPoints + 1; 
+                    powerRunningTotal = powerRunningTotal + currentPower;
+                    nPowerPoints = nPowerPoints + 1;
+                    double timeLeft_s = optionSettings.T_sample_s - stopWatch.Elapsed.TotalSeconds;
+                    string timeStr = string.Format("Collection time remaining: {0:F1}s", timeLeft_s);
+                    Rep.Post(timeStr,repLevel.narrative,null);
                 } 
                 else 
                 { 

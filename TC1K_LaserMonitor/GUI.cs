@@ -85,6 +85,10 @@ namespace TC1K_LaserMonitor
             monitorOKAndonObj.control = monitorOKAndon;
             updateMonitorAndon();
 
+            // this does NOT go according to the settings files
+            optionSettings.checkForDrift = false;
+            optionSettingsBindingSource.ResetBindings(false);
+
             // configure the laser
             if ( (optionSettings.laserType == "MaiTai") || optionSettings.fakeOutLaser)
             {
@@ -125,6 +129,8 @@ namespace TC1K_LaserMonitor
             if (laser.initialize() == TaskEnd.OK)
             {
                 // create a timer
+                laserGUIupdateTimer.Close();
+                laserGUIupdateTimer.Dispose();
                 laserGUIupdateTimer = new System.Timers.Timer((double)optionSettings.laserGUIUpdateInterval_ms);
                 laserGUIupdateTimer.Elapsed += updateLaserStatus; // Hook up the Elapsed event for the timer.
                 laserGUIupdateTimer.AutoReset = true;
@@ -252,6 +258,14 @@ namespace TC1K_LaserMonitor
         {
             if (getQueryLock() == false) { return; }
 
+            disconnectWithPumpOn();
+
+            queryInProgress = false;
+        }
+
+
+        private void disconnectWithPumpOn()
+        {
             // close shutter(s)
             if (laser.tunableShutterIsOpen)
             {
@@ -273,8 +287,6 @@ namespace TC1K_LaserMonitor
             {
                 Rep.Post("OK to close App", repLevel.details, null);
             }
-
-            queryInProgress = false;
         }
 
 
@@ -285,7 +297,7 @@ namespace TC1K_LaserMonitor
             // turn off pump
             laser.turnPumpOnOff(false);
             // call other function which does the rest
-            button_disconnectPumpOn_Click(null, null);
+            disconnectWithPumpOn();
 
             queryInProgress = false;
         }
@@ -720,18 +732,35 @@ namespace TC1K_LaserMonitor
                         }
 
                         // monitor laser power (the whole point of this app!)
-                        if (baselineCollected)
+                        if (baselineCollected && optionSettings.checkForDrift)
                         {
                             bool powerOK = laser.checkLaserFluctuationsOK(laser.currentPower);
                             if (!powerOK)
                             {
-                                string powerString = String.Format("Laser power {0}W exceeds range of {1}-{2}x {3}W!", laser.currentPower,
+                                string powerString = String.Format("Laser power {0:F2}W exceeds range of {1} - {2} x baseline {3:F2}W!", laser.currentPower,
                                     optionSettings.laserPowerMinFrac, optionSettings.laserPowerMaxFrac, laser.baselineLaserPower);
                                 Rep.Post(powerString, repLevel.error, null);
+                            }
+                            bool modelockOverLimit = false;
+                            if (laser.modelockConfigured && !laser.modelocked)
+                            {
+                                laser.nModelockErrors++;
+                                Rep.Post("Modelock error! Total of " + laser.nModelockErrors.ToString(), repLevel.error, null);
+                                modelockOverLimit = laser.nModelockErrors > optionSettings.maxModelockErrors;
+                                if (modelockOverLimit)
+                                {
+                                    string modemsg = String.Format("{0} modelock errors exceeds maximum of {1}! Terminating orchestrator.", laser.nModelockErrors, optionSettings.maxModelockErrors);
+                                    Rep.Post(modemsg, repLevel.error, null);
+                                }
+                            }
+                            if (!powerOK || modelockOverLimit)
+                            {
                                 if (optionSettings.terminateOrchestratorOnDrift)
                                 {
                                     terminateOrchestrator();
                                 }
+                                optionSettings.checkForDrift = false;
+                                optionSettingsBindingSource.ResetBindings(false);
                             }
                         }
 
@@ -793,6 +822,7 @@ namespace TC1K_LaserMonitor
             if (baselineOK == LaserReturnCode.OK)
             {
                 baseline_W.Text = String.Format("{0:F2}", laser.baselineLaserPower);
+                checkForDrift.Enabled = true;
                 baselineCollected = true;
             }
             else
@@ -808,7 +838,7 @@ namespace TC1K_LaserMonitor
 
         private void updateMonitorAndon()
         {
-            if (baselineCollected && optionSettings.terminateOrchestratorOnDrift)
+            if (baselineCollected && optionSettings.terminateOrchestratorOnDrift && optionSettings.checkForDrift)
             {
                 monitorOKAndonObj.set("Monitor is ON", andonOKColor, andonTextLightColor);
             }
@@ -819,7 +849,7 @@ namespace TC1K_LaserMonitor
         }
 
         
-        private void terminateOrchestrator()
+        private bool terminateOrchestrator()
         {
             // Get all processes running on the local computer.
             System.Diagnostics.Process[] localAll = System.Diagnostics.Process.GetProcesses();
@@ -831,14 +861,13 @@ namespace TC1K_LaserMonitor
             if (localByName.Length==0)
             {
                 Rep.Post("Could not get DssHost process! Could not terminate orchestrator!", repLevel.error, null);
-                return;
+                return(false);
             }
             else
             {
                 if (localByName.Length > 1)
                 {
                     Rep.Post("Multiple DssHost processes were found! " + localByName.Length.ToString(), repLevel.error, null);
-                    return;
                 }
                 try
                 {
@@ -848,17 +877,33 @@ namespace TC1K_LaserMonitor
                 catch (Exception ex)
                 {
                     Rep.Post("Exception while attempting to terminate Orchestrator!", repLevel.error, ex.Message);
+                    return (false);
                 }
             }
+
+            // make it stop
+            checkForDrift.Enabled = false;
+            return (true);
         }
 
 
         private void terminateOrchestratorOnDrift_CheckedChanged(object sender, EventArgs e)
         {
+            // I don't know why it needs these; I guess it's not updating quickly enough on its own
             optionSettings.terminateOrchestratorOnDrift = terminateOrchestratorOnDrift.Checked;
+            optionSettings.checkForDrift = checkForDrift.Checked;
 
-            // the value of optionSettings.terminateOrchestratorOnDrift gets updated automatically, then this affects the andon
+            if (optionSettings.checkForDrift)
+            {
+                laser.nModelockErrors = 0;
+            }
+
             updateMonitorAndon();
+        }
+
+        private void GUI_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            button_disconnectPumpOff_Click(null, null);
         }
 
 

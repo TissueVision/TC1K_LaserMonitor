@@ -118,18 +118,6 @@ namespace TC1K_LaserMonitor
                 if (queryResponse != "error")
                 {
                     tunableShutterIsOpen = Convert.ToInt16(queryResponse) == 1;
-                    if (tunableShutterNeededForLaserOK)
-                    {
-                        if (tunableShutterIsOpen)
-                        {
-                            nConsecutiveShutterErrors = 0;
-                        }
-                        else
-                        {
-                            nShutterErrors++;
-                            nConsecutiveShutterErrors++;
-                        }
-                    }
                 }
 
                 // check status byte
@@ -141,16 +129,7 @@ namespace TC1K_LaserMonitor
                     // see whether pump laser is on
                     pumpLaserIsOn = ((responseAsByte & 1) == 1); // check whether the 1st bit is high 
                     // check modelock
-                    modelocked = ((responseAsByte & 2) == 2); // check whether the 2nd bit is high 
-                    if (modelocked)
-                    {
-                        nConsecutiveModelockErrors = 0;
-                    }
-                    else
-                    {
-                        nModelockErrors++;
-                        nConsecutiveModelockErrors++;
-                    }
+                    modelocked = ((responseAsByte & 2) == 2); // check whether the 2nd bit is high
                 }
 
                 // read power
@@ -246,22 +225,11 @@ namespace TC1K_LaserMonitor
             {
                 allResponsesOK = false;
             }
-            if (allResponsesOK)
+            if (!allResponsesOK)
             {
-                nConsecutiveQueryErrors = 0;
-            }
-            else
-            {
-                nQueryErrors++;
-                nConsecutiveQueryErrors++;
-                string queryErrorMsg = String.Format("{0} consecutive laser query errors", nConsecutiveQueryErrors);
-                if (nConsecutiveQueryErrors > optionSettings.maxConsecutiveQueryErrors)
-                {
-                    setNotReady();
-                }
                 gui.Invoke(new System.Windows.Forms.MethodInvoker(delegate ()
                 {
-                    Rep.Post(queryErrorMsg, repLevel.details, null);
+                    Rep.Post("Query error!", repLevel.details, null);
                 }));
             }
             if (allResponsesOK)

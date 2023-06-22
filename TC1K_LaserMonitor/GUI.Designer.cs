@@ -105,13 +105,18 @@
             this.collectBaseline = new System.Windows.Forms.Button();
             this.terminateOrchestratorOnDrift = new System.Windows.Forms.CheckBox();
             this.monitorOKAndon = new System.Windows.Forms.Button();
+            this.maxModelockErrors = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.checkForDrift = new System.Windows.Forms.CheckBox();
+            this.maxModelockLossTime_s = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.optionSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.optionSettingsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // setGreenPower
             // 
-            this.setGreenPower.Location = new System.Drawing.Point(982, 498);
+            this.setGreenPower.Location = new System.Drawing.Point(982, 486);
             this.setGreenPower.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.setGreenPower.Name = "setGreenPower";
             this.setGreenPower.Size = new System.Drawing.Size(167, 26);
@@ -125,7 +130,7 @@
             this.greenPowerNow.AutoSize = true;
             this.greenPowerNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.greenPowerNow.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.greenPowerNow.Location = new System.Drawing.Point(1276, 532);
+            this.greenPowerNow.Location = new System.Drawing.Point(1276, 520);
             this.greenPowerNow.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.greenPowerNow.Name = "greenPowerNow";
             this.greenPowerNow.Size = new System.Drawing.Size(15, 20);
@@ -134,7 +139,7 @@
             // 
             // greenPowerToSet
             // 
-            this.greenPowerToSet.Location = new System.Drawing.Point(1253, 499);
+            this.greenPowerToSet.Location = new System.Drawing.Point(1253, 487);
             this.greenPowerToSet.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.greenPowerToSet.Name = "greenPowerToSet";
             this.greenPowerToSet.Size = new System.Drawing.Size(65, 23);
@@ -152,7 +157,7 @@
             // check_controlGreenPower
             // 
             this.check_controlGreenPower.AutoSize = true;
-            this.check_controlGreenPower.Location = new System.Drawing.Point(982, 463);
+            this.check_controlGreenPower.Location = new System.Drawing.Point(982, 451);
             this.check_controlGreenPower.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.check_controlGreenPower.Name = "check_controlGreenPower";
             this.check_controlGreenPower.Size = new System.Drawing.Size(155, 21);
@@ -164,7 +169,7 @@
             // 
             this.label_greenPowerNow.AutoSize = true;
             this.label_greenPowerNow.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label_greenPowerNow.Location = new System.Drawing.Point(979, 532);
+            this.label_greenPowerNow.Location = new System.Drawing.Point(979, 520);
             this.label_greenPowerNow.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_greenPowerNow.Name = "label_greenPowerNow";
             this.label_greenPowerNow.Size = new System.Drawing.Size(146, 17);
@@ -752,7 +757,7 @@
             this.errorAndon.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorAndon.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.errorAndon.Location = new System.Drawing.Point(48, 672);
-            this.errorAndon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.errorAndon.Margin = new System.Windows.Forms.Padding(2);
             this.errorAndon.Name = "errorAndon";
             this.errorAndon.Size = new System.Drawing.Size(89, 66);
             this.errorAndon.TabIndex = 224;
@@ -817,16 +822,16 @@
             this.userMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.userMessages.FormattingEnabled = true;
             this.userMessages.ItemHeight = 16;
-            this.userMessages.Location = new System.Drawing.Point(528, 364);
-            this.userMessages.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.userMessages.Location = new System.Drawing.Point(569, 574);
+            this.userMessages.Margin = new System.Windows.Forms.Padding(2);
             this.userMessages.Name = "userMessages";
             this.userMessages.ScrollAlwaysVisible = true;
-            this.userMessages.Size = new System.Drawing.Size(375, 228);
+            this.userMessages.Size = new System.Drawing.Size(754, 164);
             this.userMessages.TabIndex = 229;
             // 
             // timerTest
             // 
-            this.timerTest.Location = new System.Drawing.Point(979, 659);
+            this.timerTest.Location = new System.Drawing.Point(527, 443);
             this.timerTest.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.timerTest.Name = "timerTest";
             this.timerTest.Size = new System.Drawing.Size(79, 29);
@@ -841,7 +846,7 @@
             this.timerTestLabel.AutoSize = true;
             this.timerTestLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timerTestLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.timerTestLabel.Location = new System.Drawing.Point(976, 697);
+            this.timerTestLabel.Location = new System.Drawing.Point(524, 481);
             this.timerTestLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.timerTestLabel.Name = "timerTestLabel";
             this.timerTestLabel.Size = new System.Drawing.Size(105, 13);
@@ -852,7 +857,7 @@
             // maxPowerFrac
             // 
             this.maxPowerFrac.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "laserPowerMaxFrac", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.maxPowerFrac.Location = new System.Drawing.Point(743, 211);
+            this.maxPowerFrac.Location = new System.Drawing.Point(743, 215);
             this.maxPowerFrac.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.maxPowerFrac.Name = "maxPowerFrac";
             this.maxPowerFrac.Size = new System.Drawing.Size(65, 23);
@@ -862,7 +867,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(525, 213);
+            this.label1.Location = new System.Drawing.Point(525, 218);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 17);
@@ -872,7 +877,7 @@
             // minPowerFrac
             // 
             this.minPowerFrac.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "laserPowerMinFrac", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.minPowerFrac.Location = new System.Drawing.Point(743, 249);
+            this.minPowerFrac.Location = new System.Drawing.Point(743, 247);
             this.minPowerFrac.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.minPowerFrac.Name = "minPowerFrac";
             this.minPowerFrac.Size = new System.Drawing.Size(65, 23);
@@ -882,7 +887,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(525, 251);
+            this.label2.Location = new System.Drawing.Point(525, 250);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 17);
@@ -892,7 +897,7 @@
             // baseline_W
             // 
             this.baseline_W.Enabled = false;
-            this.baseline_W.Location = new System.Drawing.Point(743, 123);
+            this.baseline_W.Location = new System.Drawing.Point(659, 133);
             this.baseline_W.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.baseline_W.Name = "baseline_W";
             this.baseline_W.Size = new System.Drawing.Size(65, 23);
@@ -902,7 +907,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label3.Location = new System.Drawing.Point(525, 125);
+            this.label3.Location = new System.Drawing.Point(554, 136);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 17);
@@ -912,7 +917,7 @@
             // T_sample_s
             // 
             this.T_sample_s.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "T_sample_s", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.T_sample_s.Location = new System.Drawing.Point(743, 172);
+            this.T_sample_s.Location = new System.Drawing.Point(743, 183);
             this.T_sample_s.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.T_sample_s.Name = "T_sample_s";
             this.T_sample_s.Size = new System.Drawing.Size(65, 23);
@@ -922,7 +927,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label4.Location = new System.Drawing.Point(525, 173);
+            this.label4.Location = new System.Drawing.Point(525, 186);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 17);
@@ -931,10 +936,10 @@
             // 
             // collectBaseline
             // 
-            this.collectBaseline.Location = new System.Drawing.Point(528, 75);
+            this.collectBaseline.Location = new System.Drawing.Point(528, 102);
             this.collectBaseline.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.collectBaseline.Name = "collectBaseline";
-            this.collectBaseline.Size = new System.Drawing.Size(167, 26);
+            this.collectBaseline.Size = new System.Drawing.Size(199, 26);
             this.collectBaseline.TabIndex = 240;
             this.collectBaseline.Text = "Collect baseline power";
             this.collectBaseline.UseVisualStyleBackColor = true;
@@ -946,7 +951,7 @@
             this.terminateOrchestratorOnDrift.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.optionSettingsBindingSource, "terminateOrchestratorOnDrift", true));
             this.terminateOrchestratorOnDrift.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.optionSettingsBindingSource, "terminateOrchestratorOnDrift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.terminateOrchestratorOnDrift.Location = new System.Drawing.Point(528, 28);
-            this.terminateOrchestratorOnDrift.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terminateOrchestratorOnDrift.Margin = new System.Windows.Forms.Padding(2);
             this.terminateOrchestratorOnDrift.Name = "terminateOrchestratorOnDrift";
             this.terminateOrchestratorOnDrift.Size = new System.Drawing.Size(223, 21);
             this.terminateOrchestratorOnDrift.TabIndex = 241;
@@ -968,6 +973,63 @@
             this.monitorOKAndon.Text = ".....";
             this.monitorOKAndon.UseVisualStyleBackColor = false;
             // 
+            // maxModelockErrors
+            // 
+            this.maxModelockErrors.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "maxModelockErrors", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.maxModelockErrors.Location = new System.Drawing.Point(743, 279);
+            this.maxModelockErrors.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.maxModelockErrors.Name = "maxModelockErrors";
+            this.maxModelockErrors.Size = new System.Drawing.Size(65, 23);
+            this.maxModelockErrors.TabIndex = 246;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label5.Location = new System.Drawing.Point(525, 282);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(139, 17);
+            this.label5.TabIndex = 245;
+            this.label5.Text = "Max modelock errors";
+            // 
+            // checkForDrift
+            // 
+            this.checkForDrift.AutoSize = true;
+            this.checkForDrift.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.optionSettingsBindingSource, "checkForDrift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkForDrift.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.optionSettingsBindingSource, "checkForDrift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkForDrift.Enabled = false;
+            this.checkForDrift.Location = new System.Drawing.Point(528, 61);
+            this.checkForDrift.Margin = new System.Windows.Forms.Padding(2);
+            this.checkForDrift.Name = "checkForDrift";
+            this.checkForDrift.Size = new System.Drawing.Size(115, 21);
+            this.checkForDrift.TabIndex = 247;
+            this.checkForDrift.Text = "Check for drift";
+            this.checkForDrift.UseVisualStyleBackColor = true;
+            this.checkForDrift.CheckedChanged += new System.EventHandler(this.terminateOrchestratorOnDrift_CheckedChanged);
+            // 
+            // maxModelockLossTime_s
+            // 
+            this.maxModelockLossTime_s.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.optionSettingsBindingSource, "maxModelockLossTime_s", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.maxModelockLossTime_s.Location = new System.Drawing.Point(743, 311);
+            this.maxModelockLossTime_s.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.maxModelockLossTime_s.Name = "maxModelockLossTime_s";
+            this.maxModelockLossTime_s.Size = new System.Drawing.Size(65, 23);
+            this.maxModelockLossTime_s.TabIndex = 249;
+            this.maxModelockLossTime_s.Visible = false;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label6.Location = new System.Drawing.Point(525, 314);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(177, 17);
+            this.label6.TabIndex = 248;
+            this.label6.Text = "Max modelock loss time (s)";
+            this.label6.Visible = false;
+            // 
             // optionSettingsBindingSource
             // 
             this.optionSettingsBindingSource.DataSource = typeof(TC1K_LaserMonitor.optionSettings);
@@ -977,6 +1039,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1370, 752);
+            this.Controls.Add(this.maxModelockLossTime_s);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.checkForDrift);
+            this.Controls.Add(this.maxModelockErrors);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.monitorOKAndon);
             this.Controls.Add(this.terminateOrchestratorOnDrift);
             this.Controls.Add(this.collectBaseline);
@@ -1057,6 +1124,7 @@
             this.Name = "GUI";
             this.Text = "Laser Control and Monitor";
             this.Load += new System.EventHandler(this.GUI_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GUI_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.optionSettingsBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1142,6 +1210,11 @@
         private System.Windows.Forms.Button collectBaseline;
         private System.Windows.Forms.CheckBox terminateOrchestratorOnDrift;
         public System.Windows.Forms.Button monitorOKAndon;
+        private System.Windows.Forms.TextBox maxModelockErrors;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkForDrift;
+        private System.Windows.Forms.TextBox maxModelockLossTime_s;
+        private System.Windows.Forms.Label label6;
 
     }
 }

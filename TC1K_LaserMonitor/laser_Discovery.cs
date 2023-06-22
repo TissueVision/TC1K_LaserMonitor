@@ -209,18 +209,6 @@ namespace TC1K_LaserMonitor
                 if (queryResponse != "error")
                 {
                     tunableShutterIsOpen = (queryResponse == "1");
-                    if (tunableShutterNeededForLaserOK)
-                    {
-                        if (tunableShutterIsOpen)
-                        {
-                            nConsecutiveShutterErrors = 0;
-                        }
-                        else
-                        {
-                            nShutterErrors++;
-                            nConsecutiveShutterErrors++;
-                        }
-                    }                
                 }
 
                 // next, fixed shutter
@@ -229,18 +217,6 @@ namespace TC1K_LaserMonitor
                 if (queryResponse != "error")
                 {
                     fixedShutterIsOpen = (queryResponse == "1");
-                    if (fixedShutterNeededForLaserOK)
-                    {
-                        if (fixedShutterIsOpen)
-                        {
-                            nConsecutiveShutterErrors = 0;
-                        }
-                        else
-                        {
-                            nShutterErrors++;
-                            nConsecutiveShutterErrors++;
-                        }
-                    }
                 }
 
                 // read power
@@ -282,25 +258,9 @@ namespace TC1K_LaserMonitor
             {
                 allResponsesOK = false;
             }
-            if (allResponsesOK)
+            if (!allResponsesOK)
             {
-                nConsecutiveQueryErrors = 0;
-            }
-            else
-            {
-                nQueryErrors++;
-                nConsecutiveQueryErrors++;
-                string queryErrorMsg = String.Format("{0} consecutive laser query errors", nConsecutiveQueryErrors);
-                if (nConsecutiveQueryErrors > optionSettings.maxConsecutiveQueryErrors)
-                {
-                    setNotReady();
-                }
-
-                Rep.Post(queryErrorMsg, repLevel.details, null);
-                //gui.Invoke(new System.Windows.Forms.MethodInvoker(delegate ()
-                //{
-                //    Rep.Post(queryErrorMsg, repLevel.details, null);
-                //}));
+                Rep.Post("Query error!", repLevel.details, null);
             }
             if (allResponsesOK)
             {

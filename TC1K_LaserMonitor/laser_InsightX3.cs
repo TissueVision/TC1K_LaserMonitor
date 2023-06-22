@@ -133,15 +133,6 @@ namespace TC1K_LaserMonitor
                     pumpLaserIsOn = (responseAsByteString.Substring(respLen - 1 - 0, 1) == "1"); // if the 1st bit (bit 0) is high, it indicates an error
                     // check modelock
                     modelocked = (responseAsByteString.Substring(respLen - 1 - 1, 1) == "1"); // check whether the 2nd bit (bit 1) is high 
-                    if (modelocked)
-                    {
-                        nConsecutiveModelockErrors = 0;
-                    }
-                    else
-                    {
-                        nModelockErrors++;
-                        nConsecutiveModelockErrors++;
-                    }
                     // check keyswitch
                     physicalKeyIsOn = (responseAsByteString.Substring(respLen - 1 - 10, 1) == "0"); // if the 11th bit (bit 10) is low, the key is on
                     // check for error
@@ -190,22 +181,11 @@ namespace TC1K_LaserMonitor
             {
                 allResponsesOK = false;
             }
-            if (allResponsesOK)
+            if (!allResponsesOK)
             {
-                nConsecutiveQueryErrors = 0;
-            }
-            else
-            {
-                nQueryErrors++;
-                nConsecutiveQueryErrors++;
-                string queryErrorMsg = String.Format("{0} consecutive laser query errors", nConsecutiveQueryErrors);
-                if (nConsecutiveQueryErrors > optionSettings.maxConsecutiveQueryErrors)
-                {
-                    setNotReady();
-                }
                 gui.Invoke(new System.Windows.Forms.MethodInvoker(delegate ()
                 {
-                    Rep.Post(queryErrorMsg, repLevel.details, null);
+                    Rep.Post("Query error!", repLevel.details, null);
                 }));
             }
             if (allResponsesOK)

@@ -903,7 +903,10 @@ namespace TC1K_LaserMonitor
 
         private void GUI_FormClosing(object sender, FormClosingEventArgs e)
         {
-            button_disconnectPumpOff_Click(null, null);
+            if (laser.commsOK)
+            {
+                button_disconnectPumpOff_Click(null, null);
+            }
         }
 
 
